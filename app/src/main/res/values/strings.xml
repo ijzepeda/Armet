@@ -59,6 +59,9 @@
     <string name="server_took_too_long">Server took too long.</string>
     <string name="something_happened">Something Happened.</string>
     <string name="button_ok">OK</string>
+    <string name="telephone">telefono</string>
+    <string name="get_started">Registrar</string>
+    <string name="add_client">ADD CLIENT</string>
 
 
 </resources>

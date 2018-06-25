@@ -3,14 +3,25 @@ package com.ijzepeda.armet.util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.VolleyError;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.gson.Gson;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.User;
@@ -18,7 +29,10 @@ import com.ijzepeda.armet.model.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.security.auth.callback.Callback;
 
 public class Util {
 
@@ -150,6 +164,8 @@ public static ProgressDialog pDialog;
         Toast.makeText(context, context.getResources().getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
         return false;
     }
+
+
 
 
 }
