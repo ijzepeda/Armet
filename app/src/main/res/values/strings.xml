@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Armet</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <!-- Strings related to login -->
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+
+    <string name="action_forgot_psw">Forgot Password?</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+
+    <string name="error_email_required">An email is required</string>
+    <string name="error_password_required">A password is required</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="incorrect_details">Your email address or password is incorrect. Please try again.</string>
+
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="recover_password">Recover Password</string>
+    <string name="recover_info_text">We will send your password reset information to the email address registered with your account.</string>
+    <string name="email_address">email address</string>
+    <string name="recover_password_mayus">RECOVER PASSWORD</string>
+
+    <string name="go_back">GO BACK</string>
+    <string name="register_subtitle">To use the ARMET app</string>
+    <string name="email_address_required">email address *</string>
+    <string name="password_required">password *</string>
+    <string name="repeat_email">repeat email *</string>
+
+    <string name="first_name">first name *</string>
+    <string name="last_name">last name</string>
+    <string name="repeat_password_required">repeat password *</string>
+    <string name="repeat_password">repeat password</string>
+
+    <!--fields-->
+    <string name="error_empty_field">This field can\'t be empty</string>
+    <string name="error_email_match">Email does not match</string>
+    <string name="error_password_match">Password does not match</string>
+    <string name="message_register_success">Thank you for registering!\n Welcome to the ARMET app. To activate your account, please follow the link in your email.</string>
+
+    <string name="_invalid_email">Invalid email. Try again.</string>
+    <string name="email_been_sent">We will send your password reset information to the email address registered with your account.</string> <!--An email has been sent to you.-->
+    <string name="required_fields">The fields with * are mandatory.</string>
+    <string name="remember_me">Remember me</string>
+
+    <string name="try_again">try again.</string>
+    <string name="please_try_again">Please try again.</string>
+
+    <string name="continue_btn">continue</string>
+    <string name="server_took_too_long">Server took too long.</string>
+    <string name="something_happened">Something Happened.</string>
+    <string name="button_ok">OK</string>
+
+
+</resources>
