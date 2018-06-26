@@ -14,7 +14,7 @@
         android:text="Producto" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/cameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -54,7 +54,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/descriptionTextView"
+            android:id="@+id/productDescriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripcion"
@@ -69,7 +69,7 @@
         android:layout_weight="1"/>
 
     <Button
-        android:id="@+id/addProductBtn"
+        android:id="@+id/createProductBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Agregar Producto" />
