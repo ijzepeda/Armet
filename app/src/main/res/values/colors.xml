@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#e52329</color>
+    <color name="armetRed">#e52329</color>
+    <color name="armetGray">#918f90</color>
+    <color name="armetDarkGray">#515151</color>
+
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorHint">#99a8c0</color>
+    <color name="colorClearGray">#bbc9e1</color>
+    <color name="colorWarning">#ffc72e</color>
+    <color name="colorOrangePoll">#f04c28</color>
+    <color name="colorGraphs">#00acda</color>
+    <color name="colorCardBorder">#aa555555</color>
+    <color name="colorActionbar">#aaaaaaaa</color>
+    <color name="colorDetailLike">#aa555555</color>
+
+    <color name="colorRippleYellow">#ffe94f</color>
+    <!--<color name="colorCard">#</color>-->
+    <!-- Message One to one colors-->
+    <color name="gray_light">#e8e8e8</color>
+    <color name="gray_transparent">#a6efefef</color>
+    <color name="gray_dark_transparent">#ae858585</color>
+    <color name="canvas_color">#1a2948</color>
+    <color name="incomming_messages">#e2e2e8</color>
+    <color name="outcomming_messages">#0e7cff</color>
+
+
+    <!-- Osmar -->
+    <color name="menu">#00abba</color>
+    <color name="white">#ffffff</color>
+    <color name="background_cardview">#b3000000</color>
+    <color name="txt_cardview">#294a7b</color>
+    <color name="txt_cardview_date">#99a8c0</color>
+    <color name="orange">#fd8926</color>
+    <color name="icon_gray">#b2b2b2</color>
+    <color name="press_blue">#2b4a79</color>
+    <color name="pov_blue">#267e7e</color>
+    <color name="green">#75be3c</color>
+    <color name="purple">#ac5baa</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="txt_content_detail">#7d7e7e</color>
+    <color name="txt_welcome">#5c99a8c0</color>
+    <color name="footer_content_detail">#294a7b</color>
+    <color name="teal_register">#0b958f</color>
+    <color name="input_comment">#ededed</color>
+
+    <color name="filter">#96000000</color>
+    <color name="content_detail_bg">#f1f0ee</color>
+    <color name="colot_indicator_bookmark">#7f7f80</color>
+    <color name="poll_question_bg">#7ffd8926</color>
+
+</resources>
