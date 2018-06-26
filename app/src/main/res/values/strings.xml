@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Armet</string>
-    <string name="facebook_app_id">197295884262870</string>
-    <string name="facebook_application_id">197295884262870</string>
-    <string name="fb_login_protocol_scheme">fb197295884262870</string>
+
 
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in</string>
