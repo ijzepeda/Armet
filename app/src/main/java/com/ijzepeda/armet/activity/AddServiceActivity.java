@@ -29,6 +29,8 @@ public class AddServiceActivity extends AppCompatActivity {
         addNewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //enviar u nbundle con el id de este servicio, y al final de product, se agrega a la lista de servicio. en caso que no exista un serivcio, solo se registra a la base de datos [sin relacion]
+
                 startActivity(new Intent(context,AddProductActivity.class));
             }
         });

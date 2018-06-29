@@ -159,6 +159,8 @@ public class AddProductActivity extends BaseActivity {
 
     public void sendData() {
         Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
+        //save on Firebase
+//        check if any value on bundle, then add to
     }
 
 
