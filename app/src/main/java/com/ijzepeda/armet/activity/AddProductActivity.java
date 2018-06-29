@@ -2,6 +2,7 @@ package com.ijzepeda.armet.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,10 +12,13 @@ import android.widget.Toast;
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
 import com.ijzepeda.armet.R;
+import com.ijzepeda.armet.model.DataSingleton;
+import com.ijzepeda.armet.model.Product;
 
 public class AddProductActivity extends BaseActivity {
     private static final String TAG = "AddProductActivity";
     Context context;
+    Product newProduct;
     Button createProductBtn;
     ImageButton photoButton;
     EditText itemSerialNumberTextView;
@@ -22,6 +26,7 @@ public class AddProductActivity extends BaseActivity {
     EditText itemDescriptionTextView;
     int CAMERA_CODE = 111;
     FirebaseVisionBarcodeDetectorOptions barcodeOptions;
+    DataSingleton singleton ;
 
 
 //    @Override
@@ -34,6 +39,7 @@ public class AddProductActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         context = this;
+        singleton = DataSingleton.getInstance();
         initComponents();
 
     }
@@ -158,7 +164,22 @@ public class AddProductActivity extends BaseActivity {
 
 
     public void sendData() {
-        Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
+
+        Log.e(TAG, "itemSerialNumberTextView.getText().toString(): "+itemSerialNumberTextView.getText().toString());
+        Log.e(TAG, " itemNameTextView.getText().toString(): "+itemNameTextView.getText().toString() );
+        Log.e(TAG, " itemDescriptionTextView.getText().toString(): "+ itemDescriptionTextView.getText().toString());
+        Log.e(TAG, " itemSerialNumberTextView.getText(): "+ itemSerialNumberTextView.getText());
+        Log.e(TAG, " itemSerialNumberTextView.getText(): ");
+       // Log.e(TAG, "singleton.getProduct(newProduct.getId()): "+singleton.getProduct(newProduct.getId()) );
+
+        newProduct=new Product(itemSerialNumberTextView.getText().toString(),
+                itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
+                "image.url");
+         singleton.setProducts(newProduct);
+        Log.e(TAG, "newProduct.getId(): "+newProduct.getId() );
+        Log.e(TAG, "singleton.getProduct(newProduct.getId()): "+singleton.getProduct(newProduct.getId()) );
+
+        Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId()+" Agregado", Toast.LENGTH_SHORT).show();
     }
 
 
