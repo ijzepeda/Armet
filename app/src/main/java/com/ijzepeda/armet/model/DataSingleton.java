@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DataSingleton {
@@ -13,7 +12,7 @@ public class DataSingleton {
 
     private Map<String, Client> clients = new HashMap<>();
     private Map<String, Product> products = new HashMap<>();
-    private Map<String, Service> services = new HashMap<>();
+    private Map<String, Servicio> services = new HashMap<>();
     private Map<String, Task> tasks = new HashMap<>();
     private Map<String, User> users = new HashMap<>();
 
@@ -78,11 +77,11 @@ public class DataSingleton {
     }
 
 
-    public Map<String, Service> getServices() {
+    public Map<String, Servicio> getServices() {
         return services;
     }
 
-    public void setServices(Map<String, Service> services) {
+    public void setServices(Map<String, Servicio> services) {
         this.services = services;
     }
 

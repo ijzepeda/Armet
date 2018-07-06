@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,22 +20,40 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetector;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.adapter.ProductBaseAdapter;
 import com.ijzepeda.armet.adapter.ProductsAdapter;
+import com.ijzepeda.armet.model.Client;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
+import com.ijzepeda.armet.model.Servicio;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.ijzepeda.armet.util.Constants.PRODUCT_ID;
 
-public class AddServiceActivity extends AppCompatActivity {
+public class AddServiceActivity extends BaseActivity {
     private static final String TAG = "AddServiceActivity";
+    Servicio service;
+    Client client;
+
     Context context;
     Button addNewProduct;
+    Button addServiceBtn;
+    TextView clientIdTextView;
+    TextView clientNameTextView;
+    ImageButton photoButton;
     //    Button addProduct;
 //    ListView productsListView;
 //    RecyclerView productsRecyclerView;
@@ -66,17 +88,26 @@ public class AddServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_service);
         context = this;
         singleton = DataSingleton.getInstance();
+
+        //todo get data from bundle, and receive client id
+        client = new Client();
+        client.setId(123456);
+        client.setName("Coral&Marina");
+
         getData();
         initComponents();
     }
 
     public void initComponents() {
         selectQtyProduct = findViewById(R.id.selectQtyProduct);
+        addServiceBtn=findViewById(R.id.addServiceBtn);
         addNewProduct = findViewById(R.id.addNewProductBtn);
+        clientIdTextView=findViewById(R.id.clientIdTextView);
+        clientNameTextView=findViewById(R.id.clientNameTextView);
 //        addProduct = findViewById(R.id.addProductBtn);
         addProductButton = findViewById(R.id.addProductButton);
 //        productsListView = findViewById(R.id.productsListView);
-
+        photoButton =findViewById(R.id.photoButton);
         //recyclerview
         spinner = findViewById(R.id.productsSpinner);
         //For spinner
@@ -96,7 +127,7 @@ public class AddServiceActivity extends AppCompatActivity {
         selectedProductsRecyclerView.setAdapter(productsAdapter);
 
 
-       
+
 
         addProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +161,31 @@ public class AddServiceActivity extends AppCompatActivity {
 //                startActivity(new Intent(context,AddProductActivity.class));
             }
         });
+
+        addServiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!clientIdTextView.getText().equals("")){
+                    saveService();
+                }
+            }
+        });
+
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanBarcode();
+
+            }
+        });
+    }
+
+
+    @Override
+    public void makeUseOfBarcode() {
+        super.makeUseOfBarcode();
+        clientIdTextView.setText(getBarcode());
+
     }
 
     public void getData() {
@@ -137,6 +193,26 @@ public class AddServiceActivity extends AppCompatActivity {
         productsOnService = new ArrayList<>();
         totalProductsList.addAll(singleton.getProductsList());
     }
+
+    public void saveService(){
+        createService();
+        Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("serviceId",service.getId());
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
+
+    public void createService(){
+        service = new Servicio();
+        service.setClientId(client.getId());
+        service.setName(clientNameTextView.getText().toString());
+        service.setId(Integer.parseInt(clientIdTextView.getText().toString()));
+
+
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -161,4 +237,8 @@ public class AddServiceActivity extends AppCompatActivity {
 
         }
     }
+
+
+
+
 }

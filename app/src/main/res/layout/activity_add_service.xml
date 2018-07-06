@@ -14,7 +14,7 @@
         android:text="Servicio" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/photoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -26,10 +26,23 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/clientTextView"
+            android:id="@+id/clientIdTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="No. Servicio (Puedes tomar foto)" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/clientNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del Servicio" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -93,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Agregar Producto"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/addNewProductBtn"

@@ -3,12 +3,12 @@ package com.ijzepeda.armet.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Service implements Parcelable {
+public class Servicio implements Parcelable {
 
     int id;
     int clientId;
     String name;
-    int product_id;
+    int product_id; //este es un array de products_id
     String status;
 /**
  * rel cliente-servicio:
@@ -19,10 +19,10 @@ public class Service implements Parcelable {
  *
  *
  * */
-    public Service() {
+    public Servicio() {
     }
 
-    public Service(int id, int clientId, String name, int product_id, String status) {
+    public Servicio(int id, int clientId, String name, int product_id, String status) {
         this.id = id;
         this.clientId = clientId;
         this.name = name;
@@ -30,7 +30,7 @@ public class Service implements Parcelable {
         this.status = status;
     }
 
-    protected Service(Parcel in) {
+    protected Servicio(Parcel in) {
         id = in.readInt();
         clientId = in.readInt();
         name = in.readString();
@@ -38,15 +38,15 @@ public class Service implements Parcelable {
         status = in.readString();
     }
 
-    public static final Creator<Service> CREATOR = new Creator<Service>() {
+    public static final Creator<Servicio> CREATOR = new Creator<Servicio>() {
         @Override
-        public Service createFromParcel(Parcel in) {
-            return new Service(in);
+        public Servicio createFromParcel(Parcel in) {
+            return new Servicio(in);
         }
 
         @Override
-        public Service[] newArray(int size) {
-            return new Service[size];
+        public Servicio[] newArray(int size) {
+            return new Servicio[size];
         }
     };
 
