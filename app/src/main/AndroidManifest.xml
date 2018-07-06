@@ -20,15 +20,19 @@
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.SplashActivity" />
-        <activity android:name=".activity.LoginActivity" > <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-
-        <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
+        <activity android:name=".activity.LoginActivity" > </activity>
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.EditTaskActivity" />
-        <activity android:name=".activity.AddClientActivity" />
-        <activity android:name=".activity.AddServiceActivity" />
+        <activity android:name=".activity.AddClientActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.AddServiceActivity" >
+
+        </activity>
         <activity android:name=".activity.AddProductActivity">
 
         </activity>

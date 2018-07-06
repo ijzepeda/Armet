@@ -30,6 +30,10 @@ public class Product implements Parcelable {
         this.localQty = localQty;
     }
 
+    public void addLocalQty(int addQty) {
+        this.localQty += addQty;
+    }
+
     public Product(String id, String name, String description, String imageUrl, int qty) {
         this.id = id;
         this.name = name;

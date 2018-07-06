@@ -39,19 +39,6 @@
         android:layout_height="wrap_content"
         android:text="Productos Disponibles" />
 
-    <android.support.v7.widget.RecyclerView
-
-        android:visibility="gone"
-        android:id="@+id/productsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="55dp" />
-
-    <ListView
-        android:visibility="visible"
-        android:id="@+id/productsListView"
-        android:layout_width="match_parent"
-        android:layout_height="55dp" />
-
 
     <LinearLayout
         android:id="@+id/productLayout"
@@ -63,13 +50,17 @@
             android:id="@+id/productsSpinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:spinnerMode="dialog"
+            android:textAlignment="center" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/selectQtyProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -77,25 +68,38 @@
                 android:hint="Cantidad"
                 android:inputType="number"
                 android:maxEms="4"
-                android:minEms="3"
-                android:text="cantidad" />
+                android:minEms="4" />
         </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/addProductButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/baseline_done_white_18dp" />
+
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/selectedProductsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/product_list_item">
+
+    </android.support.v7.widget.RecyclerView>
+
     <Button
-        android:id="@+id/addProductBtn"
+        android:id="@+id/HiddenaddProductBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar Producto" />
+        android:text="Agregar Producto"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/addNewProductBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Agregar Nuevo Producto" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/addServiceBtn"

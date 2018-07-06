@@ -8,12 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.ijzepeda.armet.R;
+import com.ijzepeda.armet.adapter.ProductBaseAdapter;
 import com.ijzepeda.armet.adapter.ProductsAdapter;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
@@ -26,16 +32,23 @@ public class AddServiceActivity extends AppCompatActivity {
     private static final String TAG = "AddServiceActivity";
     Context context;
     Button addNewProduct;
-    Button addProduct;
-    ListView productsListView;
-    RecyclerView productsRecyclerView;
+    //    Button addProduct;
+//    ListView productsListView;
+//    RecyclerView productsRecyclerView;
+    RecyclerView selectedProductsRecyclerView;
     LinearLayoutManager layoutManager;
     ProductsAdapter productsAdapter;
+
+    Spinner spinner;
+    ProductBaseAdapter baseAdapter;
 
     Service currentService;
     ArrayList<Product> productsOnService;//>how to hold qty? on object, but neber sent
     ArrayList<Product> totalProductsList;
 //    ArrayList<String> productsNames;
+
+    ImageButton addProductButton;
+    EditText selectQtyProduct;
 
     DataSingleton singleton;
 
@@ -58,17 +71,56 @@ public class AddServiceActivity extends AppCompatActivity {
     }
 
     public void initComponents() {
+        selectQtyProduct = findViewById(R.id.selectQtyProduct);
         addNewProduct = findViewById(R.id.addNewProductBtn);
-        addProduct = findViewById(R.id.addProductBtn);
-        productsListView = findViewById(R.id.productsListView);
+//        addProduct = findViewById(R.id.addProductBtn);
+        addProductButton = findViewById(R.id.addProductButton);
+//        productsListView = findViewById(R.id.productsListView);
 
         //recyclerview
-        productsRecyclerView = findViewById(R.id.productsRecyclerView);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        productsAdapter = new ProductsAdapter(totalProductsList);
-        productsRecyclerView.setLayoutManager(layoutManager);
-        productsRecyclerView.setAdapter(productsAdapter);
+        spinner = findViewById(R.id.productsSpinner);
+        //For spinner
+//        ArrayAdapter dataAdapter1 = new ArrayAdapter(this, android.R.layout.simple_spinner_item, totalProductsList);
+//        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //        spinner.setAdapter(dataAdapter1);
+        baseAdapter = new ProductBaseAdapter(this, totalProductsList);
+        spinner.setAdapter(baseAdapter);
+//productsListView.setAdapter(baseAdapter);
 
+        //        productsRecyclerView = findViewById(R.id.productsRecyclerView);
+
+        selectedProductsRecyclerView = findViewById(R.id.selectedProductsRecyclerView);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        selectedProductsRecyclerView.setLayoutManager(layoutManager);
+        productsAdapter = new ProductsAdapter(context, productsOnService);
+        selectedProductsRecyclerView.setAdapter(productsAdapter);
+
+
+       
+
+        addProductButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //get spinner item id/object and put it on listview, then onstate change para el recyclerview
+
+                Product temp = (Product) spinner.getSelectedItem();
+                Toast.makeText(context, "spinner element:" + temp.getName(), Toast.LENGTH_SHORT).show();
+                int qty = (selectQtyProduct.getText().toString().equals("")?1:Integer.parseInt(selectQtyProduct.getText().toString()));
+//                if(qty==0)
+//                    temp.setLocalQty(0);
+//                else
+                temp.addLocalQty(qty); //increase qty
+//aun cuando haya borrado el elemento, se le queda guardado el valor de local qty, hay que checar como borrar bien el objeto de productsOnservices
+                //to avoid repeating element, just replace it/update it
+                if (productsOnService.contains(temp))
+                    productsOnService.set(productsOnService.indexOf(temp), temp);
+                else
+                    productsOnService.add(temp);
+
+                productsAdapter.notifyDataSetChanged();
+                selectQtyProduct.setText(null);
+            }
+        });
         addNewProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,17 +130,12 @@ public class AddServiceActivity extends AppCompatActivity {
 //                startActivity(new Intent(context,AddProductActivity.class));
             }
         });
-        addProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Will add a new field with dropdown and quantity [new element on array for recyclerview]
-            }
-        });
-
     }
 
     public void getData() {
-
+        totalProductsList = new ArrayList<>();
+        productsOnService = new ArrayList<>();
+        totalProductsList.addAll(singleton.getProductsList());
     }
 
     @Override
@@ -98,7 +145,13 @@ public class AddServiceActivity extends AppCompatActivity {
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     Product productTemp = singleton.getProduct(data.getStringExtra(PRODUCT_ID));
-                    productsOnService.add(productTemp);
+                    //productsOnService.add(productTemp);
+                    totalProductsList.add(productTemp); //todo checar: este se debe subir a internet, o mas bien actualizar los datos de internet
+                    baseAdapter.notifyDataSetChanged();
+                    // productsOnService.add(productTemp); //todo checar: este se debe subir a internet, o mas bien actualizar los datos de internet
+
+                    //dataAdapter.notifyDataSetChanged();
+                    //productsAdapter.notifyDataSetChanged();
                     break;
                 case Activity.RESULT_CANCELED:
                     Toast.makeText(context, "Something happened", Toast.LENGTH_SHORT).show();
