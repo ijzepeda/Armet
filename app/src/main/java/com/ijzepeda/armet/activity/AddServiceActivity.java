@@ -189,6 +189,8 @@ public class AddServiceActivity extends BaseActivity {
     }
 
     public void getData() {
+
+        //todo, after creating a service, when creating a new service the previous localQty keeps prevs values
         totalProductsList = new ArrayList<>();
         productsOnService = new ArrayList<>();
         totalProductsList.addAll(singleton.getProductsList());
