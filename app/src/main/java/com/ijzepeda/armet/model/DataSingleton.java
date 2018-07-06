@@ -2,6 +2,7 @@ package com.ijzepeda.armet.model;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +40,17 @@ public class DataSingleton {
 public Product getProduct(String id){
         return products.get(id);
 }
-    public Map<String, Product> getProducts() {
+    public Map<String, Product> getProductsMap() {
         return products;
+    }
+    public ArrayList<Product> getProductsList() {
+
+        ArrayList<Product> productList = new ArrayList<>();
+        for(Map.Entry<String, Product>  entry: products.entrySet()){
+            productList.add(entry.getValue());
+        }
+
+        return productList;
     }
 
     public void setProducts( Product product) {
@@ -50,6 +60,18 @@ public Product getProduct(String id){
         Log.e(TAG, "singleton getProduct(products.getid()).getId: "+getProduct(product.getId()).getId() );
 //        this.products = products;
     }
+
+    public ArrayList<String> getProductNamesList(){
+        ArrayList<String> productNamesList = new ArrayList<>();
+        for(Map.Entry<String, Product>  entry: products.entrySet()){
+//            Product product = entry.getValue();
+//            productNamesList.add(product.getName());
+            productNamesList.add(entry.getValue().getName());
+            //falta el ID :  va a hacer falta usar un ad
+        }
+return productNamesList;
+    }
+
 
     public Map<String, Service> getServices() {
         return services;

@@ -46,4 +46,7 @@ public class Constants {
     public static final int RESPONSE_SERVER_ERROR = 500;
 
 
+    public static final String PRODUCT_ID ="productId";
+
+
 }

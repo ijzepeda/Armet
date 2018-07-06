@@ -8,8 +8,43 @@ public class Product implements Parcelable {
     String name;
     String description;
     String imageUrl;
+    int qty;
+    int localQty; //never upload ON create
 
     public Product() {
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    public int getLocalQty() {
+        return localQty;
+    }
+
+    public void setLocalQty(int localQty) {
+        this.localQty = localQty;
+    }
+
+    public Product(String id, String name, String description, String imageUrl, int qty) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.qty = qty;
+    }
+
+    public Product(String id, String name, String description, String imageUrl, int qty, int localQty) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.qty = qty;
+        this.localQty = localQty;
     }
 
     public Product(String id, String name, String description, String imageUrl) {

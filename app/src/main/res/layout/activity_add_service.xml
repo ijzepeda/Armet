@@ -40,8 +40,18 @@
         android:text="Productos Disponibles" />
 
     <android.support.v7.widget.RecyclerView
+
+        android:visibility="gone"
+        android:id="@+id/productsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="53dp" />
+        android:layout_height="55dp" />
+
+    <ListView
+        android:visibility="visible"
+        android:id="@+id/productsListView"
+        android:layout_width="match_parent"
+        android:layout_height="55dp" />
+
 
     <LinearLayout
         android:id="@+id/productLayout"

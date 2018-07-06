@@ -1,6 +1,8 @@
 package com.ijzepeda.armet.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -165,12 +167,13 @@ public class AddProductActivity extends BaseActivity {
 
     public void sendData() {
 
-        Log.e(TAG, "itemSerialNumberTextView.getText().toString(): "+itemSerialNumberTextView.getText().toString());
-        Log.e(TAG, " itemNameTextView.getText().toString(): "+itemNameTextView.getText().toString() );
-        Log.e(TAG, " itemDescriptionTextView.getText().toString(): "+ itemDescriptionTextView.getText().toString());
-        Log.e(TAG, " itemSerialNumberTextView.getText(): "+ itemSerialNumberTextView.getText());
-        Log.e(TAG, " itemSerialNumberTextView.getText(): ");
-       // Log.e(TAG, "singleton.getProduct(newProduct.getId()): "+singleton.getProduct(newProduct.getId()) );
+        //TODO: Remember that singleton it WILL be different than what is going to be uploaded to JSON firebase
+        // , as it will hold local quantity, while JSONFirebase will hold Absolute quantity.
+        //Although Product.class will work fine with the rest of the app. Only on AddProduct is going to be used differently. wont upload, so that structure is not going to exists online.
+//        but it will upload a custom version of it, that holds only totalqty, but not local.
+
+
+
 
         newProduct=new Product(itemSerialNumberTextView.getText().toString(),
                 itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
@@ -180,7 +183,14 @@ public class AddProductActivity extends BaseActivity {
         Log.e(TAG, "singleton.getProduct(newProduct.getId()): "+singleton.getProduct(newProduct.getId()) );
 
         Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId()+" Agregado", Toast.LENGTH_SHORT).show();
-       // Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
+
+//        [if everything is aok, then return]/
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("productId",newProduct.getId());
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+
+        // Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
         //save on Firebase
 //        check if any value on bundle, then add to
     }
