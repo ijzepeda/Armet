@@ -12,7 +12,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
+import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
@@ -28,7 +34,7 @@ public class AddProductActivity extends BaseActivity {
     EditText itemDescriptionTextView;
     int CAMERA_CODE = 111;
     FirebaseVisionBarcodeDetectorOptions barcodeOptions;
-    DataSingleton singleton ;
+    DataSingleton singleton;
 
 
 //    @Override
@@ -42,9 +48,21 @@ public class AddProductActivity extends BaseActivity {
         setContentView(R.layout.activity_add_product);
         context = this;
         singleton = DataSingleton.getInstance();
+        initFirebase();
         initComponents();
 
     }
+
+    public void initFirebase() {
+        FirebaseApp app = FirebaseApp.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance(app);
+        FirebaseAuth auth = FirebaseAuth.getInstance(app);
+        FirebaseStorage storage = FirebaseStorage.getInstance(app);
+        DatabaseReference databaseRef = database.getReference("products");
+
+
+    }
+
 
     public void initComponents() {
         createProductBtn = findViewById(R.id.createProductBtn);
@@ -73,7 +91,7 @@ public class AddProductActivity extends BaseActivity {
     @Override
     public void makeUseOfBarcode() {
         super.makeUseOfBarcode();
-        Log.e(TAG, "makeUseOfBarcode: getBarcode():"+getBarcode() );
+        Log.e(TAG, "makeUseOfBarcode: getBarcode():" + getBarcode());
         itemSerialNumberTextView.setText(getBarcode());
 
     }
@@ -173,21 +191,20 @@ public class AddProductActivity extends BaseActivity {
 //        but it will upload a custom version of it, that holds only totalqty, but not local.
 
 
-
-
-        newProduct=new Product(itemSerialNumberTextView.getText().toString(),
+        newProduct = new Product(itemSerialNumberTextView.getText().toString(),
                 itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
                 "image.url");
-         singleton.setProducts(newProduct);
-        Log.e(TAG, "newProduct.getId(): "+newProduct.getId() );
-        Log.e(TAG, "singleton.getProduct(newProduct.getId()): "+singleton.getProduct(newProduct.getId()) );
+        singleton.setProducts(newProduct);
+        Log.e(TAG, "newProduct.getId(): " + newProduct.getId());
+        Log.e(TAG, "singleton.getProduct(newProduct.getId()): " + singleton.getProduct(newProduct.getId()));
 
-        Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId()+" Agregado", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId() + " Agregado", Toast.LENGTH_SHORT).show();
 
 //        [if everything is aok, then return]/
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("productId",newProduct.getId());
-        setResult(Activity.RESULT_OK,returnIntent);
+        returnIntent.putExtra("productId", newProduct.getId());
+        setResult(Activity.RESULT_OK, returnIntent);
+        singleton.update(context);
         finish();
 
         // Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();

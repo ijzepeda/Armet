@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ijzepeda.armet.R;
+import com.ijzepeda.armet.model.DataSingleton;
 
 public class MainActivity extends Activity {
 
@@ -22,7 +23,7 @@ public class MainActivity extends Activity {
     FirebaseUser user;
     Button newTaskBtn;
     Button addClientBtn;
-
+DataSingleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class MainActivity extends Activity {
         context = this;
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+singleton.getInstance(context);
         initComponents();
   }
 

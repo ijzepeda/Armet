@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ijzepeda.armet.util.Constants.PRODUCT_ID;
+import static com.ijzepeda.armet.util.Constants.SERVICE_ID;
 
 public class AddServiceActivity extends BaseActivity {
     private static final String TAG = "AddServiceActivity";
@@ -95,6 +96,7 @@ public class AddServiceActivity extends BaseActivity {
         client.setName("Coral&Marina");
 
         getData();
+        //todo loadDAta() > I receive from bundle the client Id
         initComponents();
     }
 
@@ -198,10 +200,15 @@ public class AddServiceActivity extends BaseActivity {
 
     public void saveService(){
         createService();
+        singleton.setService(service);
         Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("serviceId",service.getId());
+        returnIntent.putExtra(SERVICE_ID,service.getId());
         setResult(Activity.RESULT_OK,returnIntent);
+        productsOnService.clear();
+        productsOnService=null;
+        singleton.update(context);
+
         finish();
     }
 
@@ -209,7 +216,8 @@ public class AddServiceActivity extends BaseActivity {
         service = new Servicio();
         service.setClientId(client.getId());
         service.setName(clientNameTextView.getText().toString());
-        service.setId(Integer.parseInt(clientIdTextView.getText().toString()));
+        service.setId((clientIdTextView.getText().toString()));
+        service.setProducts(productsOnService);
 
 
     }

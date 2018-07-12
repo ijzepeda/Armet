@@ -1,6 +1,10 @@
 package com.ijzepeda.armet.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,18 +19,52 @@ public class DataSingleton {
     private Map<String, Servicio> services = new HashMap<>();
     private Map<String, Task> tasks = new HashMap<>();
     private Map<String, User> users = new HashMap<>();
+private static String PREFS_NAME = "Prefs";
+
+public void update(Context context){
+    Gson gson = new Gson();
+    String json = gson.toJson(INSTANCE);
+
+    SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+    SharedPreferences.Editor editor = settings.edit();
+      editor.putString("singleton", json);
+    editor.apply();
+
+}
+public static DataSingleton loadSingleton(Context context){
+    SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+    String json= settings.getString("singleton", "");
+
+    Gson gson = new Gson();
+
+//    if(gson.fromJson(json, DataSingleton.class)!=null)
+    if(json.equals(""))
+        return new DataSingleton();
+        else
+        return gson.fromJson(json, DataSingleton.class);
 
 
+}
     // other instance variables can be here
 
     private DataSingleton() {
     }
 
-    ;
+
+    public static DataSingleton getInstance(Context context) {
+
+        if (INSTANCE == null) {
+           INSTANCE= loadSingleton(context);
+            // INSTANCE = new DataSingleton();
+        }
+        return (INSTANCE);
+    }
 
     public static DataSingleton getInstance() {
+
         if (INSTANCE == null) {
-            INSTANCE = new DataSingleton();
+//           INSTANCE= loadSingleton(context);
+             INSTANCE = new DataSingleton();
         }
         return (INSTANCE);
     }
@@ -76,11 +114,27 @@ public class DataSingleton {
         return productNamesList;
     }
 
+public Servicio getService(String id){
+        return services.get(id);
+}
 
     public Map<String, Servicio> getServices() {
         return services;
     }
 
+    public ArrayList<Servicio> getServicesList() {
+
+        ArrayList<Servicio> productList = new ArrayList<>();
+        for (Map.Entry<String, Servicio> entry : services.entrySet()) {
+            productList.add(entry.getValue());
+        }
+
+        return productList;
+    }
+
+    public void setService(Servicio service){
+        services.put(service.getId(),service);
+    }
     public void setServices(Map<String, Servicio> services) {
         this.services = services;
     }
