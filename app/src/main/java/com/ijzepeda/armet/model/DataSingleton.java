@@ -15,7 +15,7 @@ public class DataSingleton {
     private Map<String, Servicio> services = new HashMap<>();
     private Map<String, Task> tasks = new HashMap<>();
     private Map<String, User> users = new HashMap<>();
-
+    private User user;
 
     // other instance variables can be here
 
@@ -99,5 +99,12 @@ public class DataSingleton {
 
     public void setUsers(Map<String, User> users) {
         this.users = users;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser(){
+        return user;
     }
 }
