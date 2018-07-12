@@ -47,7 +47,7 @@ public class AddClientActivity extends BaseActivity {
         setContentView(R.layout.activity_add_client);
         context=this;
         //loadValues() >
-        getData();
+        //getData();
         initComponents();
     }
 

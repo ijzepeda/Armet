@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
@@ -36,6 +39,11 @@ public class AddProductActivity extends BaseActivity {
     FirebaseVisionBarcodeDetectorOptions barcodeOptions;
     DataSingleton singleton;
 
+    FirebaseApp app ;
+    FirebaseDatabase database;
+    FirebaseAuth auth ;
+    FirebaseStorage storage ;
+    DatabaseReference databaseRef;
 
 //    @Override
 //    public String scanBarcode() {
@@ -54,11 +62,11 @@ public class AddProductActivity extends BaseActivity {
     }
 
     public void initFirebase() {
-        FirebaseApp app = FirebaseApp.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance(app);
-        FirebaseAuth auth = FirebaseAuth.getInstance(app);
-        FirebaseStorage storage = FirebaseStorage.getInstance(app);
-        DatabaseReference databaseRef = database.getReference("products");
+         app = FirebaseApp.getInstance();
+        database = FirebaseDatabase.getInstance(app);
+        auth = FirebaseAuth.getInstance(app);
+        storage = FirebaseStorage.getInstance(app);
+        databaseRef = database.getReference("products");
 
 
     }
@@ -198,6 +206,46 @@ public class AddProductActivity extends BaseActivity {
         Log.e(TAG, "newProduct.getId(): " + newProduct.getId());
         Log.e(TAG, "singleton.getProduct(newProduct.getId()): " + singleton.getProduct(newProduct.getId()));
 
+//        databaseRef.push().setValue(newProduct);
+//        if databaseRef.child(newProduct.getId()).
+//       databaseRef.child(newProduct.getId()).setValue(newProduct);
+
+        DatabaseReference mref=databaseRef.child(newProduct.getId());
+
+        mref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(context, "Ya existe ese numero de serie", Toast.LENGTH_LONG).show();
+                }else{
+                    databaseRef.child(newProduct.getId()).setValue(newProduct);
+
+                    Toast.makeText(context, singleton.getProduct(newProduct.getId()).getName() + " Agregado", Toast.LENGTH_SHORT).show();
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("productId", newProduct.getId());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    singleton.update(context);
+                    finish();
+
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+//        Log.e(TAG, "sendData: databaseRef.child(newProduct.getId()).getKey"+databaseRef.child("0000"). );
+//      if(databaseRef.child(newProduct.getId()).equals(newProduct.getId())){
+//          Toast.makeText(context, "Ya existe ese producto", Toast.LENGTH_SHORT).show();
+//      }
+//      else {
+        /*  databaseRef.child(newProduct.getId()).setValue(newProduct);
+
         Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId() + " Agregado", Toast.LENGTH_SHORT).show();
 
 //        [if everything is aok, then return]/
@@ -205,8 +253,8 @@ public class AddProductActivity extends BaseActivity {
         returnIntent.putExtra("productId", newProduct.getId());
         setResult(Activity.RESULT_OK, returnIntent);
         singleton.update(context);
-        finish();
-
+        finish();*/
+    //}
         // Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
         //save on Firebase
 //        check if any value on bundle, then add to
