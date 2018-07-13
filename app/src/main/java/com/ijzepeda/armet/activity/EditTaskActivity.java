@@ -1,8 +1,11 @@
 package com.ijzepeda.armet.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,8 @@ import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Task;
 import com.ijzepeda.armet.model.User;
+
+import static com.ijzepeda.armet.util.Constants.EXTRA_TASK_ID;
 
 public class EditTaskActivity extends AppCompatActivity {
 Context context;
@@ -47,7 +52,7 @@ com.firebase.ui.auth.data.model.User fbUser;
 //loading files if editing
     boolean editingTask=false;
     String taskId;
-
+    private static final String TAG = "EditTaskActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +93,7 @@ com.firebase.ui.auth.data.model.User fbUser;
          doneBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+                 Log.e(TAG, "onClick: DONEbtn" );
                  verifyData();
              }
          });
@@ -115,7 +121,7 @@ com.firebase.ui.auth.data.model.User fbUser;
 
     public void createTask(){
         task=new Task();
-        task.setId(123123);
+        task.setId("000");
         task.setStartingTime(startTimeTextView.getText().toString()); ;
         task.setAddress(placeTextView.getText().toString());
         task.setAction(actionTextView.getText().toString());
@@ -123,13 +129,31 @@ com.firebase.ui.auth.data.model.User fbUser;
         task.setTec2Name(tec2TextView.getText().toString());
         task.setTec3Name(tec3TextView.getText().toString());
         task.setFinalTime(endTimeTextView.getText().toString());
+        Log.e(TAG, "createTask: taskaction"+task.getAction());
 
     }
     public void updateTask(){
-        databaseReference.child(taskId).setValue(task);
+
+        Log.e(TAG, "updateTask: " );databaseReference.child(taskId).setValue(task);
     }
     public void saveTask(){
-databaseReference.push().setValue(task);
+
+        Log.e(TAG, "saveTask: "+task.getAction() );
+//        databaseReference.push().setValue(task);
+
+        String currentTaskId = databaseReference.push().getKey();
+        task.setId(currentTaskId);
+        databaseReference.child(currentTaskId).setValue(task);
+
+
+
+        Intent intent = getIntent();
+        intent.putExtra(EXTRA_TASK_ID,task.getId());
+        setResult(Activity.RESULT_OK, intent);
+//        singleton.update(context);//notrequired anymore
+        finish();
+
+
     }
 
 

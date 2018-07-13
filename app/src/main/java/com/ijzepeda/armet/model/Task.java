@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Task implements Parcelable {
-    int id;
+    String id;
     int userId;
     String address;
     String location;
@@ -28,7 +28,7 @@ public class Task implements Parcelable {
     public Task() {
     }
 
-    public Task(int id, int userId, String address, String location, String action, String tec1Name, int tec1Id, String tec2Name, int tec2Id, String tec3Name, int tec3Id, String finalTime, String startingTime, String date) {
+    public Task(String id, int userId, String address, String location, String action, String tec1Name, int tec1Id, String tec2Name, int tec2Id, String tec3Name, int tec3Id, String finalTime, String startingTime, String date) {
         this.id = id;
         this.userId = userId;
         this.address = address;
@@ -46,7 +46,7 @@ public class Task implements Parcelable {
     }
 
     protected Task(Parcel in) {
-        id = in.readInt();
+        id = in.readString();
         userId = in.readInt();
         address = in.readString();
         location = in.readString();
@@ -64,7 +64,7 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeInt(userId);
         dest.writeString(address);
         dest.writeString(location);
@@ -97,11 +97,11 @@ public class Task implements Parcelable {
         }
     };
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

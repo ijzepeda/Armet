@@ -58,6 +58,14 @@ public class Constants {
     public static final String EXTRA_CLIENT_ID ="clientId";
     public static final String EXTRA_CLIENT_NAME ="clientName";
 
+    public static final String EXTRA_TASK_ID ="taskId";
+    public static final String EXTRA_ANOTHER_ID ="";
+
+
+    public static final int RESULT_TASK=102;
+
+
+
 
 
 }
