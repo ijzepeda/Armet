@@ -98,7 +98,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
             clientNameTextView = itemView.findViewById(R.id.clientNameTextView);
 
 //            qtyTextView = itemView.findViewById(R.id.itemQtyTextView);
-            deleteBtn=itemView.findViewById(R.id.editServiceBtn);
+            deleteBtn=itemView.findViewById(R.id.deleteServiceBtn);
             editBtn=itemView.findViewById(R.id.editServiceBtn);
             itemView.setOnClickListener(this);
         }

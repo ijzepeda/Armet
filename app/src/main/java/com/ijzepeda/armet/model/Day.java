@@ -62,7 +62,9 @@ public class Day implements Parcelable{
     public ArrayList<String> getTasksIds() {
         return tasksIds;
     }
-
+public void setService(String serviceId){
+        clientServiceIds.add(serviceId);
+}
     public void setTask(String taskid){
         tasksIds.add(taskid);
     }
