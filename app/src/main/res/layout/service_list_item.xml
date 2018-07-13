@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@drawable/baseline_close_white_18dp" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_close_white_18dp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -40,5 +41,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/baseline_edit_white_18dp" />
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_edit_white_18dp" />
 </LinearLayout>
