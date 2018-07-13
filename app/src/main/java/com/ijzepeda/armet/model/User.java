@@ -41,7 +41,7 @@ public class User implements Parcelable {
  ]
 
  }*/
-    int id;
+    String id;
     String firstName;
     String lastName;
     String email;
@@ -52,7 +52,7 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(int id, String firstName, String lastName, String email, String phone, String imageUrl, String position) {
+    public User(String id, String firstName, String lastName, String email, String phone, String imageUrl, String position) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,7 +63,7 @@ public class User implements Parcelable {
     }
 
     protected User(Parcel in) {
-        id = in.readInt();
+        id = in.readString();
         firstName = in.readString();
         lastName = in.readString();
         email = in.readString();
@@ -84,11 +84,11 @@ public class User implements Parcelable {
         }
     };
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -147,7 +147,7 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(email);

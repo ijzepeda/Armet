@@ -70,6 +70,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (requestCode == CAMERA_CODE) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
@@ -105,9 +107,10 @@ public class BaseActivity extends AppCompatActivity {
                             // ...
                         }
                     });
-        } else {
-            Toast.makeText(context, "No picture Taken", Toast.LENGTH_SHORT).show();
         }
+//        else {
+//            Toast.makeText(context, "No picture Taken", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 

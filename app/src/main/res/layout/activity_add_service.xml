@@ -5,20 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.AddClientActivity">
+    tools:context=".activity.AddServiceActivity">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Servicio" />
 
-    <ImageButton
-        android:id="@+id/photoButton"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|fill_vertical" />
+
+        <ImageButton
+            android:id="@+id/addClientButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/baseline_add_white_18dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/serviceIdTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. Servicio (Puedes tomar foto)"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/photoButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -26,23 +70,11 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/clientIdTextView"
+            android:id="@+id/serviceNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="No. Servicio (Puedes tomar foto)" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/clientNameTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre del Servicio" />
+            android:hint="Nombre del Servicio"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -81,7 +113,8 @@
                 android:hint="Cantidad"
                 android:inputType="number"
                 android:maxEms="4"
-                android:minEms="4" />
+                android:minEms="4"
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageButton

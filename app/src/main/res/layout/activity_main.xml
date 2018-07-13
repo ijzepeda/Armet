@@ -10,13 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tasksRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -31,19 +32,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/clientRecyclerView"
+            android:id="@+id/serviciosRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <Button
-            android:id="@+id/addClientBtn"
+            android:id="@+id/addServiceBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_client" />
+            android:text="@string/add_service" />
 
     </LinearLayout>
 
@@ -52,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Finish Day" />
+
     <Button
         android:id="@+id/logoutBtn"
         android:layout_width="match_parent"
