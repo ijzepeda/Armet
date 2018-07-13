@@ -9,8 +9,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:srcCompat="@drawable/baseline_close_white_18dp" />
-
+        app:srcCompat="@drawable/baseline_close_white_18dp"
+        />
     <TextView
         android:id="@+id/itemNameTextView"
         android:layout_width="0dp"

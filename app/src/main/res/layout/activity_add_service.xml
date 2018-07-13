@@ -88,8 +88,9 @@
             android:id="@+id/addProductButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/baseline_done_white_18dp" />
+            app:srcCompat="@drawable/baseline_done_white_18dp"
 
+            />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
