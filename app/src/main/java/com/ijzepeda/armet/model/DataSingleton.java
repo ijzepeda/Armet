@@ -125,6 +125,7 @@ public Servicio getService(String id){
     public ArrayList<Servicio> getServicesList() {
 
         ArrayList<Servicio> productList = new ArrayList<>();
+        Log.e(TAG, "getServicesList size: "+services.size() );
         for (Map.Entry<String, Servicio> entry : services.entrySet()) {
             productList.add(entry.getValue());
         }
@@ -133,7 +134,12 @@ public Servicio getService(String id){
     }
 
     public void setService(Servicio service){
+        Log.e(TAG, "setService: "+service.getId() );
+        if(services.isEmpty())
+            services=new HashMap<>();
         services.put(service.getId(),service);
+
+//        Log.e(TAG, "setService saved on singleton: "+services.get(service).getId() );//todo checar, da error. nunca se crea, da nulo en services
     }
     public void setServices(Map<String, Servicio> services) {
         this.services = services;

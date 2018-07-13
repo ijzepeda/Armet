@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Client implements Parcelable {
-    int id;
+    String id;
     String name;
     String address;
     String location;
@@ -13,7 +13,7 @@ public class Client implements Parcelable {
     public Client() {
     }
 
-    public Client(int id, String name, String address, String location, String phone) {
+    public Client(String id, String name, String address, String location, String phone) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -22,7 +22,7 @@ public class Client implements Parcelable {
     }
 
     protected Client(Parcel in) {
-        id = in.readInt();
+        id = in.readString();
         name = in.readString();
         address = in.readString();
         location = in.readString();
@@ -41,11 +41,11 @@ public class Client implements Parcelable {
         }
     };
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -88,7 +88,7 @@ public class Client implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(name);
         dest.writeString(address);
         dest.writeString(location);

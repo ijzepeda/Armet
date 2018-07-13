@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,9 @@ import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
 
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDITING_PRODUCT;
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDIT_PRODUCT;
+
 public class AddProductActivity extends BaseActivity {
     private static final String TAG = "AddProductActivity";
     Context context;
@@ -38,12 +42,7 @@ public class AddProductActivity extends BaseActivity {
     int CAMERA_CODE = 111;
     FirebaseVisionBarcodeDetectorOptions barcodeOptions;
     DataSingleton singleton;
-
-    FirebaseApp app ;
-    FirebaseDatabase database;
-    FirebaseAuth auth ;
-    FirebaseStorage storage ;
-    DatabaseReference databaseRef;
+    boolean editingProduct;
 
 //    @Override
 //    public String scanBarcode() {
@@ -55,20 +54,31 @@ public class AddProductActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         context = this;
+
         singleton = DataSingleton.getInstance();
         initFirebase();
         initComponents();
+        Intent intent = getIntent();
+        editingProduct = intent.getBooleanExtra(EXTRA_EDITING_PRODUCT, false);
+        if (editingProduct) {
+            LoadEditProduct(intent.getStringExtra(EXTRA_EDIT_PRODUCT));
+        }
 
     }
 
+
+    FirebaseApp app;
+    FirebaseDatabase database;
+    FirebaseAuth auth;
+    FirebaseStorage storage;
+    DatabaseReference databaseRef;
+
     public void initFirebase() {
-         app = FirebaseApp.getInstance();
+        app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
         auth = FirebaseAuth.getInstance(app);
         storage = FirebaseStorage.getInstance(app);
         databaseRef = database.getReference("products");
-
-
     }
 
 
@@ -95,6 +105,38 @@ public class AddProductActivity extends BaseActivity {
         });
 
     }
+
+    public void LoadEditProduct(String id) {
+
+        DatabaseReference childRef = databaseRef.child(id);
+        childRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Product product = dataSnapshot.getValue(Product.class);
+                    fillFields(product);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    public void fillFields(Product product) {
+        itemSerialNumberTextView.setText(product.getId());
+        itemSerialNumberTextView.setClickable(false);
+        itemSerialNumberTextView.setFocusable(false);
+        itemNameTextView.setText(product.getName());
+        itemNameTextView.setClickable(false);
+        itemNameTextView.setFocusable(false);
+        itemDescriptionTextView.setText(product.getDescription());
+    }
+
 
     @Override
     public void makeUseOfBarcode() {
@@ -203,24 +245,21 @@ public class AddProductActivity extends BaseActivity {
                 itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
                 "image.url");
         singleton.setProducts(newProduct);
-        Log.e(TAG, "newProduct.getId(): " + newProduct.getId());
-        Log.e(TAG, "singleton.getProduct(newProduct.getId()): " + singleton.getProduct(newProduct.getId()));
 
-//        databaseRef.push().setValue(newProduct);
-//        if databaseRef.child(newProduct.getId()).
-//       databaseRef.child(newProduct.getId()).setValue(newProduct);
 
-        DatabaseReference mref=databaseRef.child(newProduct.getId());
-
-        mref.addValueEventListener(new ValueEventListener() {
+        DatabaseReference mref = databaseRef.child(newProduct.getId());
+        mref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists() && !editingProduct) {
                     Toast.makeText(context, "Ya existe ese numero de serie", Toast.LENGTH_LONG).show();
-                }else{
+                } else {
                     databaseRef.child(newProduct.getId()).setValue(newProduct);
 
-                    Toast.makeText(context, singleton.getProduct(newProduct.getId()).getName() + " Agregado", Toast.LENGTH_SHORT).show();
+                    if(editingProduct)
+                    Toast.makeText(context, singleton.getProduct(newProduct.getId()).getName() + " Editado", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(context, singleton.getProduct(newProduct.getId()).getName() + " Agregado", Toast.LENGTH_SHORT).show();
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("productId", newProduct.getId());
@@ -231,6 +270,7 @@ public class AddProductActivity extends BaseActivity {
                 }
 
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -238,13 +278,12 @@ public class AddProductActivity extends BaseActivity {
         });
 
 
-
-//        Log.e(TAG, "sendData: databaseRef.child(newProduct.getId()).getKey"+databaseRef.child("0000"). );
-//      if(databaseRef.child(newProduct.getId()).equals(newProduct.getId())){
+//        Log.e(TAG, "sendData: databaseProductRef.child(newProduct.getId()).getKey"+databaseProductRef.child("0000"). );
+//      if(databaseProductRef.child(newProduct.getId()).equals(newProduct.getId())){
 //          Toast.makeText(context, "Ya existe ese producto", Toast.LENGTH_SHORT).show();
 //      }
 //      else {
-        /*  databaseRef.child(newProduct.getId()).setValue(newProduct);
+        /*  databaseProductRef.child(newProduct.getId()).setValue(newProduct);
 
         Toast.makeText(context, singleton.getProduct(newProduct.getId()).getId() + " Agregado", Toast.LENGTH_SHORT).show();
 
@@ -254,7 +293,7 @@ public class AddProductActivity extends BaseActivity {
         setResult(Activity.RESULT_OK, returnIntent);
         singleton.update(context);
         finish();*/
-    //}
+        //}
         // Toast.makeText(context, "Producto Agregado", Toast.LENGTH_SHORT).show();
         //save on Firebase
 //        check if any value on bundle, then add to

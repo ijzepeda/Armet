@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.AddClientActivity">
+    tools:context=".activity.AddServiceActivity">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Servicio" />
@@ -26,7 +26,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/clientIdTextView"
+            android:id="@+id/serviceIdTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="No. Servicio (Puedes tomar foto)" />
@@ -39,7 +39,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/clientNameTextView"
+            android:id="@+id/serviceNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre del Servicio" />

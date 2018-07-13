@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Servicio implements Parcelable {
 
     String id;
-    int clientId;
+    String clientId;
     String name;
     int product_id; //este es un array de products_id
     String status;
@@ -26,7 +26,7 @@ public class Servicio implements Parcelable {
     public Servicio() {
     }
 
-    public Servicio(String id, int clientId, String name, int product_id, String status, ArrayList<String> productsId, ArrayList<Product> products) {
+    public Servicio(String id, String clientId, String name, int product_id, String status, ArrayList<String> productsId, ArrayList<Product> products) {
         this.id = id;
         this.clientId = clientId;
         this.name = name;
@@ -38,7 +38,7 @@ public class Servicio implements Parcelable {
 
     protected Servicio(Parcel in) {
         id = in.readString();
-        clientId = in.readInt();
+        clientId = in.readString();
         name = in.readString();
         product_id = in.readInt();
         status = in.readString();
@@ -66,11 +66,11 @@ public class Servicio implements Parcelable {
         this.id = id;
     }
 
-    public int getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
@@ -122,7 +122,7 @@ public class Servicio implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeInt(clientId);
+        dest.writeString(clientId);
         dest.writeString(name);
         dest.writeInt(product_id);
         dest.writeString(status);

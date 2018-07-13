@@ -1,6 +1,8 @@
 package com.ijzepeda.armet.adapter;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ijzepeda.armet.R;
+import com.ijzepeda.armet.activity.AddProductActivity;
+import com.ijzepeda.armet.activity.AddServiceActivity;
 import com.ijzepeda.armet.model.Product;
 import com.ijzepeda.armet.model.Servicio;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDITING_SERVICE;
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDIT_SERVICE;
 
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHolder> {
 
@@ -41,16 +48,23 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(final ServicesAdapter.ViewHolder holder, int position) {
-        final String itemName=mData.get(position).getName();
-//        int itemQty=mData.get(position).getLocalQty();
-        //        holder.qtyTextView.setText(""+itemQty);
-
-        holder.itemNameTextView.setText(itemName);
+        final Servicio servicio=mData.get(position);
+//        final String itemName=mData.get(position).getName();
+        holder.itemNameTextView.setText(servicio.getName());
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Deleting "+itemName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Deleting "+servicio.getName(), Toast.LENGTH_SHORT).show();
                 removeAt(holder.getAdapterPosition());
+            }
+        });
+        holder.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent productIntent = new Intent(context, AddServiceActivity.class);
+                productIntent.putExtra(EXTRA_EDIT_SERVICE,servicio.getId() );
+                productIntent.putExtra(EXTRA_EDITING_SERVICE,true);
+                context.startActivity(productIntent);
             }
         });
     }
@@ -74,12 +88,14 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         TextView itemNameTextView;
 //        TextView qtyTextView;
         ImageButton deleteBtn;
+        ImageButton editBtn;
 
         ViewHolder(View itemView) {
             super(itemView);
             itemNameTextView = itemView.findViewById(R.id.itemNameTextView);
 //            qtyTextView = itemView.findViewById(R.id.itemQtyTextView);
-            deleteBtn=itemView.findViewById(R.id.deleteProductBtn);
+            deleteBtn=itemView.findViewById(R.id.editServiceBtn);
+            editBtn=itemView.findViewById(R.id.editServiceBtn);
             itemView.setOnClickListener(this);
         }
 

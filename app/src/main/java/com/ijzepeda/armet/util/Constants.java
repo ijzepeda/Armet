@@ -50,4 +50,14 @@ public class Constants {
     public static final String SERVICE_ID ="serviceId";
 
 
+    public static final String EXTRA_EDIT_SERVICE ="editService";
+    public static final String EXTRA_EDITING_SERVICE ="editingService";
+    public static final String EXTRA_EDIT_PRODUCT ="editProduct";
+    public static final String EXTRA_EDITING_PRODUCT ="editingProduct";
+
+    public static final String EXTRA_CLIENT_ID ="clientId";
+    public static final String EXTRA_CLIENT_NAME ="clientName";
+
+
+
 }

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageButton
-        android:id="@+id/deleteProductBtn"
+        android:id="@+id/deleteServiceBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -20,4 +20,10 @@
         android:text="Item Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
+    <ImageButton
+        android:id="@+id/editServiceBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/baseline_edit_white_18dp" />
 </LinearLayout>
