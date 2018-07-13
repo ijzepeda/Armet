@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.DataSingleton;
+import com.ijzepeda.armet.model.DataSingleton;
+import com.ijzepeda.armet.model.User;
 
 public class MainActivity extends Activity {
 
@@ -23,7 +26,11 @@ public class MainActivity extends Activity {
     FirebaseUser user;
     Button newTaskBtn;
     Button addClientBtn;
-DataSingleton singleton;
+
+    DataSingleton dataSingleton;
+    User currentUser;
+    com.firebase.ui.auth.data.model.User fbUser;
+//DataSingleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +38,24 @@ DataSingleton singleton;
         setContentView(R.layout.activity_main);
         context = this;
         user = FirebaseAuth.getInstance().getCurrentUser();
+dataSingleton= DataSingleton.getInstance();
+        setupUser();
 
-singleton.getInstance(context);
+//singleton.getInstance(context);
         initComponents();
+
+  }
+
+  public void setupUser(){
+//        sincronizar con el user de firebase
+        currentUser=new User();
+        currentUser.setFirstName("Ivan");
+        currentUser.setLastName("Zepeda");
+        currentUser.setEmail("ijzepeda@hotmail.com");
+        currentUser.setPhone("7221767190");
+        currentUser.setId(1);
+        currentUser.setPosition("dev");
+        dataSingleton.setUser(currentUser);
   }
 
   public void initComponents(){
@@ -63,7 +85,11 @@ singleton.getInstance(context);
       newTaskBtn.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              startActivity(new Intent(context, EditTaskActivity.class));
+
+              Intent intent=new Intent(context, EditTaskActivity.class);
+              intent.putExtra("user","IvaNZepedA");
+
+              startActivity(intent);
           }
       });
       addClientBtn.setOnClickListener(new View.OnClickListener() {

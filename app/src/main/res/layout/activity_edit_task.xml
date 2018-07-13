@@ -35,7 +35,8 @@
                     android:layout_height="wrap_content"
                     android:hint="Hora de Inicio"
                     android:inputType="time"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -48,7 +49,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Lugar"
-                    android:maxLines="1" />
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -73,7 +76,9 @@
                     android:id="@+id/tec1Text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tecnico 1" />
+                    android:hint="Tecnico 1"
+                    android:inputType="textPersonName"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -85,7 +90,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Tecnico 2"
-                    android:maxLines="1" />
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -97,7 +104,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Tecnico 3"
-                    android:maxLines="1" />
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -110,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:hint="Hora Final"
                     android:inputType="time"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>

@@ -19,6 +19,7 @@ public class DataSingleton {
     private Map<String, Servicio> services = new HashMap<>();
     private Map<String, Task> tasks = new HashMap<>();
     private Map<String, User> users = new HashMap<>();
+    private User user;
 private static String PREFS_NAME = "Prefs";
 
 public void update(Context context){
@@ -159,5 +160,12 @@ public Servicio getService(String id){
 
     public void setUsers(Map<String, User> users) {
         this.users = users;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser(){
+        return user;
     }
 }
