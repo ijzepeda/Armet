@@ -63,6 +63,7 @@ public class Constants {
 
 
     public static final int RESULT_TASK=102;
+    public static final int REQUEST_SERVICE =222;
 
 
 

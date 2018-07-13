@@ -55,7 +55,7 @@ public class AddServiceActivity extends BaseActivity {
     TextView serviceIdTextView;
     TextView serviceNameTextView;
     ImageButton photoButton;
-    
+
     RecyclerView selectedProductsRecyclerView;
     LinearLayoutManager layoutManager;
     ProductsAdapter productsAdapter;
@@ -70,7 +70,7 @@ public class AddServiceActivity extends BaseActivity {
 
     ImageButton addProductButton;
     EditText selectQtyProduct;
-boolean editingService;
+    boolean editingService;
     DataSingleton singleton;
 
     /**
@@ -92,16 +92,15 @@ boolean editingService;
         context = this;
         singleton = DataSingleton.getInstance();
         Intent intent = getIntent();
-        editingService =intent.getBooleanExtra(EXTRA_EDITING_SERVICE,false);
+        editingService = intent.getBooleanExtra(EXTRA_EDITING_SERVICE, false);
 
         //todo get data from bundle, and receive client id
-
+//todo: ----------------if I receive a client id, then work from it. else, search from list
         client = new Client();
-
         client.setId(intent.getStringExtra(EXTRA_CLIENT_ID));
         client.setName(intent.getStringExtra(EXTRA_CLIENT_NAME));
 
-        Log.e(TAG, "onCreate client.getName(): "+ client.getName());
+        Log.e(TAG, "onCreate client.getName(): " + client.getName());
 
         initFirebase();
         getData();
@@ -114,7 +113,7 @@ boolean editingService;
 
     public void initComponents() {
         TextView title = findViewById(R.id.titleTextView);
-        title.setText("Servicio para "+ ((client.getName()==null)?" nuevo cliente":client.getName()));
+        title.setText("Servicio para " + ((client.getName() == null) ? " nuevo cliente" : client.getName()));
         selectQtyProduct = findViewById(R.id.selectQtyProduct);
         addServiceBtn = findViewById(R.id.addServiceBtn);
         addNewProduct = findViewById(R.id.addNewProductBtn);
@@ -162,7 +161,6 @@ boolean editingService;
                 // BUT it checks if exists
 
 
-
                 if (productsOnService.contains(temp))
                     productsOnService.set(productsOnService.indexOf(temp), temp);
                 else
@@ -201,10 +199,10 @@ boolean editingService;
     }
 
 
-    FirebaseApp app ;
+    FirebaseApp app;
     FirebaseDatabase database;
-    FirebaseAuth auth ;
-    FirebaseStorage storage ;
+    FirebaseAuth auth;
+    FirebaseStorage storage;
     DatabaseReference databaseProductRef;
     DatabaseReference databaseServiceRef;
 //    DatabaseReference databaseCurrentServiceRef;
@@ -219,8 +217,8 @@ boolean editingService;
     }
 
 
-    public void LoadEditService(String id){
-        DatabaseReference databaseCurrentServiceRef=databaseServiceRef.child(id);
+    public void LoadEditService(String id) {
+        DatabaseReference databaseCurrentServiceRef = databaseServiceRef.child(id);
         databaseCurrentServiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -249,13 +247,12 @@ boolean editingService;
 
 
         //serv.getProducts()
-        ArrayList<Product> templist=serv.getProducts();
-        for(Product product:templist){
+        ArrayList<Product> templist = serv.getProducts();
+        for (Product product : templist) {
             productsOnService.add(product);
         }
         productsAdapter.notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -266,38 +263,38 @@ boolean editingService;
     }
 
     public void getData() {
-            getDataFromFirebase();
+        getDataFromFirebase();
         //todo, after creating a service, when creating a new service the previous localQty keeps prevs values
 //        totalProductsList = new ArrayList<>();
         productsOnService = new ArrayList<>();
 //        totalProductsList.addAll(singleton.getProductsList());
     }
 
-    public void getDataFromFirebase(){
+    public void getDataFromFirebase() {
         totalProductsList = new ArrayList<>(); //clear list
-        Log.e(TAG, "getDataFromFirebase, loading data for first time, from onCreate: " );
+        Log.e(TAG, "getDataFromFirebase, loading data for first time, from onCreate: ");
 //        totalProductsList.addAll(singleton.getProductsList());
         databaseProductRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.e(TAG, "onDataChange: Loading data from fb to list after update on list " );
+                Log.e(TAG, "onDataChange: Loading data from fb to list after update on list ");
 //                totalProductsList.clear();
 //                totalProductsList = new ArrayList<>(); //clear list, it is a listener
-                Log.e("productos Count " ,""+snapshot.getChildrenCount());
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                Log.e("productos Count ", "" + snapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
 //            <YourClass> post = postSnapshot.getValue(<YourClass>.class);
 //                    Log.e("Get Data", post.<YourMethod>());
                     Product product = postSnapshot.getValue(Product.class);
-                    if(!totalProductsList.contains(product))
-                    totalProductsList.add(product);
-                    Log.e(TAG, "onDataChange product loaded from database: "+product.getName() );
+                    if (!totalProductsList.contains(product))
+                        totalProductsList.add(product);
+                    Log.e(TAG, "onDataChange product loaded from database: " + product.getName());
                 }
                 baseSpinnerAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("The read failed: " ,databaseError.getMessage());
+                Log.e("The read failed: ", databaseError.getMessage());
             }
         });
 
@@ -306,58 +303,68 @@ boolean editingService;
 
     public void saveService() {
         createService();
+        Log.e(TAG, "saveService: just crated service object ");
         singleton.setService(service); //maybe the list on singleton hasnt been created yet
+
+//        en ningun momento se hixo un servicio nuevo
+
 //todo
 /** Recuerda que los servicios si se pueden editar. asi que la edicion del snapshot si es posible
  * siempre y cuando se haya elegido antes. y no generado el numero de servicio*/
-        DatabaseReference mref=databaseServiceRef.child(service.getId());
-        mref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && !editingService){
-                    Toast.makeText(context, "Ya existe ese numero de servicio", Toast.LENGTH_LONG).show();
-                }else{
 
-databaseServiceRef.child(service.getId()).setValue(service);
+        //if(editingService) {
+            DatabaseReference mref = databaseServiceRef.child(service.getId());
+        Log.e(TAG, "saveService++1: " );
+            mref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.e(TAG, "onDataChange: ++2" );
+                    if (dataSnapshot.exists() && !editingService) {
+                        Toast.makeText(context, "Ya existe ese numero de servicio", Toast.LENGTH_LONG).show();
+                    } else {
 
-                    Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(SERVICE_ID, service.getId());
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    productsOnService.clear();
-                    productsOnService = null;
-                    singleton.update(context);
+                        databaseServiceRef.child(service.getId()).setValue(service);
 
-                    finish();
+                        Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(SERVICE_ID, service.getId());
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        productsOnService.clear();
+                        productsOnService = null;
+                        singleton.update(context);
+
+                        finish();
+
+                    }
 
                 }
 
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-
+                }
+            });
+//        }else{
+//            databaseServiceRef.pus
+//        }
 
     }
-public void verifyData(){
-        if(serviceIdTextView.getText().toString().equals(""))
+
+    public void verifyData() {
+        if (serviceIdTextView.getText().toString().equals(""))
             serviceIdTextView.setError("Llena este dato");
-        if(serviceNameTextView.getText().toString().equals(""))
+        if (serviceNameTextView.getText().toString().equals(""))
             serviceNameTextView.setError("Llena este dato");
-    Log.e(TAG, "verifyData: serviceId:"+ serviceIdTextView.getText()+", nameservice:"+ serviceNameTextView.getText() );
-    if( serviceIdTextView.getText().toString().equals("") || serviceNameTextView.getText().toString().equals("")){
-        Toast.makeText(context, "Llena los datos", Toast.LENGTH_SHORT).show();
-    }
-    else{
-        saveService();
+        Log.e(TAG, "verifyData: serviceId:" + serviceIdTextView.getText() + ", nameservice:" + serviceNameTextView.getText());
+        if (serviceIdTextView.getText().toString().equals("") || serviceNameTextView.getText().toString().equals("")) {
+            Toast.makeText(context, "Llena los datos", Toast.LENGTH_SHORT).show();
+        } else {
+            saveService();
+
+        }
+
 
     }
-
-
-}
 
     public void createService() {
         /**Remember that if I
@@ -365,6 +372,7 @@ public void verifyData(){
          * rather than just the ID to fetch them later*/
         service = new Servicio();
         service.setClientId(client.getId());
+        service.setClientName(client.getName());
         service.setName(serviceNameTextView.getText().toString());
         service.setId((serviceIdTextView.getText().toString()));
         service.setProducts(productsOnService);

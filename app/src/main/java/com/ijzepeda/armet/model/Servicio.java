@@ -9,6 +9,7 @@ public class Servicio implements Parcelable {
 
     String id;
     String clientId;
+    String clientName;
     String name;
     int product_id; //este es un array de products_id
     String status;
@@ -24,6 +25,17 @@ public class Servicio implements Parcelable {
  *
  * */
     public Servicio() {
+    }
+
+    public Servicio(String id, String clientId, String clientName, String name, int product_id, String status, ArrayList<String> productsId, ArrayList<Product> products) {
+        this.id = id;
+        this.clientId = clientId;
+        this.clientName = clientName;
+        this.name = name;
+        this.product_id = product_id;
+        this.status = status;
+        this.productsId = productsId;
+        this.products = products;
     }
 
     public Servicio(String id, String clientId, String name, int product_id, String status, ArrayList<String> productsId, ArrayList<Product> products) {
@@ -57,6 +69,22 @@ public class Servicio implements Parcelable {
             return new Servicio[size];
         }
     };
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
+    }
 
     public String getId() {
         return id;
@@ -106,13 +134,6 @@ public class Servicio implements Parcelable {
         this.productsId = productsId;
     }
 
-    public ArrayList<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(ArrayList<Product> products) {
-        this.products = products;
-    }
 
     @Override
     public int describeContents() {
@@ -123,6 +144,7 @@ public class Servicio implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(clientId);
+        dest.writeString(clientName);
         dest.writeString(name);
         dest.writeInt(product_id);
         dest.writeString(status);

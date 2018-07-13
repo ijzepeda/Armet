@@ -61,7 +61,8 @@
     <string name="button_ok">OK</string>
     <string name="telephone">telefono</string>
     <string name="get_started">Registrar</string>
-    <string name="add_client">ADD CLIENT</string>
+    <string name="add_client">AGREGAR CLIENTE</string>
+    <string name="add_service">AGREGAR SERVICIO</string>
 
 
 

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,30 +18,35 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
-import com.ijzepeda.armet.model.DataSingleton;
+import com.ijzepeda.armet.adapter.ServicesAdapter;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Day;
+import com.ijzepeda.armet.model.Servicio;
 import com.ijzepeda.armet.model.User;
-import com.ijzepeda.armet.util.Constants;
 
 import java.util.ArrayList;
-import java.util.Date;
 
+import static com.ijzepeda.armet.util.Constants.EXTRA_CLIENT_ID;
+import static com.ijzepeda.armet.util.Constants.EXTRA_CLIENT_NAME;
 import static com.ijzepeda.armet.util.Constants.EXTRA_TASK_ID;
-import static com.ijzepeda.armet.util.Constants.PRODUCT_ID;
+import static com.ijzepeda.armet.util.Constants.REQUEST_SERVICE;
 import static com.ijzepeda.armet.util.Constants.RESULT_TASK;
+import static com.ijzepeda.armet.util.Constants.SERVICE_ID;
 
 public class MainActivity extends Activity {
-
+    private static final String TAG = "MainActivity";
     Button logoutBtn;
     Context context;
     FirebaseUser user;
     Button newTaskBtn;
-    Button addClientBtn;
+    Button addServiceBtn;
     Button addDayButton;
 
     DataSingleton dataSingleton;
@@ -56,6 +63,12 @@ Day day;
     FirebaseAuth auth;
     FirebaseStorage storage;
     DatabaseReference databaseReference;
+    DatabaseReference databaseServiceReference;
+
+    ArrayList<Servicio> serviciosTotales;
+    ServicesAdapter servicesAdapter;
+    RecyclerView servicesRecyclerView;
+    LinearLayoutManager llm;
 
 
     @Override
@@ -72,6 +85,7 @@ Day day;
 
 //singleton.getInstance(context);
         initComponents();
+        fetchServices();
 
     }
 
@@ -81,6 +95,7 @@ Day day;
         auth=FirebaseAuth.getInstance(app);
         storage=FirebaseStorage.getInstance(app);
         databaseReference=database.getReference("day");
+        databaseServiceReference=database.getReference("service");
     }
 
 
@@ -108,7 +123,13 @@ Day day;
     }
 
     public void initComponents() {
-
+        serviceList=new ArrayList<>();
+        serviciosTotales =new ArrayList<>();
+        servicesRecyclerView=findViewById(R.id.serviciosRecyclerView);
+        llm=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        servicesRecyclerView.setLayoutManager(llm);
+        servicesAdapter=new ServicesAdapter(context, serviciosTotales);
+        servicesRecyclerView.setAdapter(servicesAdapter);
 
         logoutBtn = findViewById(R.id.logoutBtn);
         logoutBtn.setText("Logout " + user.getDisplayName());
@@ -136,7 +157,7 @@ Day day;
         });
 
         newTaskBtn = findViewById(R.id.newTaskBtn);
-        addClientBtn = findViewById(R.id.addClientBtn);
+        addServiceBtn = findViewById(R.id.addServiceBtn);
 
         newTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,10 +169,16 @@ Day day;
                 startActivityForResult(intent, RESULT_TASK);
             }
         });
-        addClientBtn.setOnClickListener(new View.OnClickListener() {
+        addServiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, AddClientActivity.class));
+//                startActivity(new Intent(context, AddClientActivity.class));
+
+                Intent productIntent = new Intent(context, AddServiceActivity.class);
+        productIntent.putExtra(EXTRA_CLIENT_NAME,"CORAL & MARINA"); //todo borrar
+                productIntent.putExtra(EXTRA_CLIENT_ID, "123");
+                startActivityForResult(productIntent, REQUEST_SERVICE);
+
             }
         });
     }
@@ -170,7 +197,28 @@ saveDay();
         Toast.makeText(context, "Day saved. Clear and close", Toast.LENGTH_SHORT).show();
     }
 
+public void fetchServices(){
 
+//fetch services from FB add them to arraylist
+                   for(String serviceId:serviceList){
+databaseServiceReference.child(serviceId).addListenerForSingleValueEvent(new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        Log.e(TAG, "fetch services onDataChange: "+dataSnapshot.toString() );
+        Servicio servicioTemp=dataSnapshot.getValue(Servicio.class);
+        serviciosTotales.add(servicioTemp);
+        servicesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+});
+                   }
+
+
+}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -188,5 +236,29 @@ saveDay();
                     break;
             }
         }
+
+        if(requestCode== REQUEST_SERVICE){
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                   // Servicio service = singleton.getService(data.getStringExtra(SERVICE_ID)); // no hace falta de singleton. ya lo leera de servidor
+//ad data.getStringExtra(SERVICE_ID) to list, and fill the adapter with the objects from that list
+
+                    String serviceId=data.getStringExtra(SERVICE_ID);
+                    serviceList.add(serviceId); //to store on firebase DayObject
+
+
+                    fetchServices();
+
+//                    serviciosTotales.add(service);
+//                    servicesAdapter.notifyDataSetChanged();
+
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Toast.makeText(context, "Something happened", Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+        }
+
     }
 }

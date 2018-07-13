@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -37,7 +36,7 @@ public class AddClientActivity extends BaseActivity {
 
     ArrayList<Servicio> serviciosTotales;
     ArrayList<Servicio> serviciosLocales;
-    private  static int REQUEST_CLIENT=222;
+    private  static int REQUEST_SERVICE =222;
 
     ServicesAdapter servicesAdapter;
     RecyclerView servicesRecyclerView;
@@ -100,7 +99,7 @@ public class AddClientActivity extends BaseActivity {
                 Intent productIntent = new Intent(context, AddServiceActivity.class);
 //        productIntent.putExtra(EXTRA_CLIENT_NAME,"CORAL & MARINA");
         productIntent.putExtra(EXTRA_CLIENT_ID, clientIdTextView.getText().toString());
-        startActivityForResult(productIntent, REQUEST_CLIENT);
+        startActivityForResult(productIntent, REQUEST_SERVICE);
 
     }
 
@@ -128,7 +127,7 @@ public class AddClientActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==REQUEST_CLIENT){
+        if(requestCode== REQUEST_SERVICE){
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     Servicio service = singleton.getService(data.getStringExtra(SERVICE_ID));
@@ -142,8 +141,5 @@ public class AddClientActivity extends BaseActivity {
 
             }
         }
-
-
-
     }
 }

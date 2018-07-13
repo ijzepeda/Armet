@@ -51,6 +51,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         final Servicio servicio=mData.get(position);
 //        final String itemName=mData.get(position).getName();
         holder.itemNameTextView.setText(servicio.getName());
+        holder.clientNameTextView.setText(servicio.getClientName());
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +87,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemNameTextView;
+        TextView clientNameTextView;
 //        TextView qtyTextView;
         ImageButton deleteBtn;
         ImageButton editBtn;
@@ -93,6 +95,8 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             itemNameTextView = itemView.findViewById(R.id.itemNameTextView);
+            clientNameTextView = itemView.findViewById(R.id.clientNameTextView);
+
 //            qtyTextView = itemView.findViewById(R.id.itemQtyTextView);
             deleteBtn=itemView.findViewById(R.id.editServiceBtn);
             editBtn=itemView.findViewById(R.id.editServiceBtn);
