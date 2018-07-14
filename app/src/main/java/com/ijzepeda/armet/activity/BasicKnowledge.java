@@ -41,6 +41,13 @@ Day basically stores ids: for User, Tasks , Services. and normal Daate
      I am also missign an adapter for tasks
      }
 
+
+     when creating a new task, verify that current task is "TERMINATED"/finished,
+     [with end time]
+     then allow to add new task
+
+     wither way create the adapter to show the first element with a different UI< task_cardview
+
      * */
 
 

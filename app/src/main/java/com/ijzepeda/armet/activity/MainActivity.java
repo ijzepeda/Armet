@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -26,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.adapter.ServicesAdapter;
+import com.ijzepeda.armet.adapter.TasksAdapter;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Day;
 import com.ijzepeda.armet.model.Servicio;
@@ -51,6 +54,16 @@ public class MainActivity extends Activity {
     Button addServiceBtn;
     Button addDayButton;
 
+    ImageButton addTaskBigButton;
+    ImageButton addServiceBigButton;
+
+    LinearLayout emptyTaskLayout;
+    LinearLayout taskLayout;
+    LinearLayout emptyServiceLayout;
+    LinearLayout serviceLayout;
+
+
+
     DataSingleton dataSingleton;
     User currentUser;
     com.firebase.ui.auth.data.model.User fbUser;
@@ -66,12 +79,21 @@ public class MainActivity extends Activity {
     FirebaseStorage storage;
     DatabaseReference databaseReference;
     DatabaseReference databaseServiceReference;
+    DatabaseReference databaseTaskReference;
 
+    //Services List
     ArrayList<Servicio> serviciosTotales;
-    ArrayList<com.ijzepeda.armet.model.Task> tasksTotales;
     ServicesAdapter servicesAdapter;
     RecyclerView servicesRecyclerView;
     LinearLayoutManager llm;
+
+    //Tasks List
+    ArrayList<com.ijzepeda.armet.model.Task> tasksTotales;
+    TasksAdapter taskAdapter;
+    RecyclerView tasksRecyclerView;
+    LinearLayoutManager llm2;
+
+
 
 
     @Override
@@ -99,13 +121,15 @@ public class MainActivity extends Activity {
         storage = FirebaseStorage.getInstance(app);
         databaseReference = database.getReference("day");
         databaseServiceReference = database.getReference("service");
+        databaseTaskReference = database.getReference("task");
+
     }
 
 
     public void createDay() {
         day = new Day();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH:mm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH:mm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
         String currentDateandTime = sdf.format(new Date());
 
         day.setDate(currentDateandTime);
@@ -141,6 +165,22 @@ public class MainActivity extends Activity {
         servicesRecyclerView.setAdapter(servicesAdapter);
 
         //set adapter for tasks
+        tasksRecyclerView=findViewById(R.id.tasksRecyclerView);
+        llm2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        tasksRecyclerView.setLayoutManager(llm2);
+        taskAdapter=new TasksAdapter(context,tasksTotales);
+        tasksRecyclerView.setAdapter(taskAdapter);
+        taskAdapter.notifyDataSetChanged();
+
+
+        emptyServiceLayout=findViewById(R.id.emptyServiceLayout);
+        emptyTaskLayout=findViewById(R.id.emptyTaskLayout);
+        taskLayout=findViewById(R.id.taskLayout);
+        serviceLayout=findViewById(R.id.serviceLayout);
+
+        taskLayout.setVisibility(View.GONE);
+        serviceLayout.setVisibility(View.GONE);
+
 
 
         logoutBtn = findViewById(R.id.logoutBtn);
@@ -174,26 +214,53 @@ public class MainActivity extends Activity {
         newTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addTask();
 
-                Intent intent = new Intent(context, EditTaskActivity.class);
-                intent.putExtra("user", "IvaNZepedA");
-
-                startActivityForResult(intent, RESULT_TASK);
             }
         });
         addServiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(context, AddClientActivity.class));
-
-                Intent productIntent = new Intent(context, AddServiceActivity.class);
-                productIntent.putExtra(EXTRA_CLIENT_NAME, "CORAL & MARINA"); //todo borrar
-                productIntent.putExtra(EXTRA_CLIENT_ID, "123");
-                startActivityForResult(productIntent, REQUEST_SERVICE);
-
+                addService();
             }
         });
+
+
+
+         addTaskBigButton=findViewById(R.id.addTaskBigButton);
+         addServiceBigButton=findViewById(R.id.addServiceBigButton);
+
+         addTaskBigButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 addTask();
+             }
+         });
+
+        addServiceBigButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 addService();
+
+             }
+         });
+
+
     }
+    public void addService(){
+
+        Intent productIntent = new Intent(context, AddServiceActivity.class);
+        productIntent.putExtra(EXTRA_CLIENT_NAME, "CORAL & MARINA"); //todo borrar
+        productIntent.putExtra(EXTRA_CLIENT_ID, "123");
+        startActivityForResult(productIntent, REQUEST_SERVICE);
+    }
+    public void addTask(){
+        Intent intent = new Intent(context, EditTaskActivity.class);
+        intent.putExtra("user", "IvaNZepedA");
+
+        startActivityForResult(intent, RESULT_TASK);
+    }
+
 
 
     public void verifyData() {
@@ -213,7 +280,7 @@ public class MainActivity extends Activity {
 
     public void fetchServices() {
         //Need to clear list before fetching
-serviciosTotales=new ArrayList<>();
+//serviciosTotales=new ArrayList<>();
 //fetch services from FB add them to arraylist
         for (String serviceId : serviceList) {
             databaseServiceReference.child(serviceId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -237,7 +304,32 @@ serviciosTotales=new ArrayList<>();
 
     public void fetchTasks() {
         //todo trabajar aqui para mostrar los elementos en el adapter
-        tasksTotales=new ArrayList<>();
+//        tasksTotales=new ArrayList<>();
+
+        for(String taskId: taskList){
+            databaseTaskReference.child(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.e(TAG, "fetch tasks onDataChange: "+dataSnapshot.toString() );
+                    Log.e(TAG, "fetch tasks onDataChange snapchot getvalue: "+dataSnapshot.getValue().toString() );
+                    com.ijzepeda.armet.model.Task taskTemp= dataSnapshot.getValue(com.ijzepeda.armet.model.Task.class);
+                    Log.e(TAG, "onDataChange: TASK TO BE LOADED"+ taskTemp.getAction() );
+                    tasksTotales.add(taskTemp);
+                    taskAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
+
+
+
+
     }
 
     @Override
@@ -247,8 +339,17 @@ serviciosTotales=new ArrayList<>();
             switch (resultCode) {
                 case Activity.RESULT_OK:
 //                    data.getStringExtra(PRODUCT_ID)
+
+
+                    //hide Button
+                    taskLayout.setVisibility(View.VISIBLE);
+                    emptyTaskLayout.setVisibility(View.GONE);
+
+
                     String taskid = data.getStringExtra(EXTRA_TASK_ID);
-//                    taskList.add(taskid);
+                    Log.e(TAG, "onActivityResult: task result id"+taskid );
+
+                    taskList.add(taskid);
                     day.setTask(taskid);
                     fetchTasks();
 
@@ -261,9 +362,14 @@ serviciosTotales=new ArrayList<>();
         if (requestCode == REQUEST_SERVICE) {
             switch (resultCode) {
                 case Activity.RESULT_OK:
+
+                    emptyServiceLayout.setVisibility(View.GONE);
+                    serviceLayout.setVisibility(View.VISIBLE);
+
+
                     // Servicio service = singleton.getService(data.getStringExtra(SERVICE_ID)); // no hace falta de singleton. ya lo leera de servidor
 //ad data.getStringExtra(SERVICE_ID) to list, and fill the adapter with the objects from that list
-
+                   // serviciosTotales=new ArrayList<>();
                     String serviceId = data.getStringExtra(SERVICE_ID);
                     serviceList.add(serviceId); //to store on firebase DayObject
                     day.setService(serviceId);

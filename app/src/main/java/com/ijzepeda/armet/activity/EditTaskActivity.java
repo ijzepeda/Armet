@@ -138,17 +138,18 @@ com.firebase.ui.auth.data.model.User fbUser;
     }
     public void saveTask(){
 
-        Log.e(TAG, "saveTask: "+task.getAction() );
+        Log.e(TAG, "saveTask action: "+task.getAction() );
 //        databaseReference.push().setValue(task);
 
         String currentTaskId = databaseReference.push().getKey();
         task.setId(currentTaskId);
         databaseReference.child(currentTaskId).setValue(task);
+        Log.e(TAG, "saveTask id: "+task.getAction() );
 
 
 
         Intent intent = getIntent();
-        intent.putExtra(EXTRA_TASK_ID,task.getId());
+        intent.putExtra(EXTRA_TASK_ID, task.getId());
         setResult(Activity.RESULT_OK, intent);
 //        singleton.update(context);//notrequired anymore
         finish();
