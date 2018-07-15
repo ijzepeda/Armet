@@ -13,12 +13,39 @@
         android:layout_height="wrap_content"
         android:text="Producto" />
 
-    <ImageButton
-        android:id="@+id/cameraButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/productIdTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. Serie (Puedes tomar foto)"
+                android:maxLines="1"
+                android:minLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="-5dp"
+            android:layout_marginTop="-5dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -26,10 +53,10 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/productIdTextView"
+            android:id="@+id/productNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="No. Serie (Puedes tomar foto)"
+            android:hint="Nombre"
             android:maxLines="1"
             android:minLines="1"
             android:singleLine="true" />
@@ -42,10 +69,10 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/productNameTextView"
+            android:id="@+id/itemFacturaTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre"
+            android:hint="Factura"
             android:maxLines="1"
             android:minLines="1"
             android:singleLine="true" />

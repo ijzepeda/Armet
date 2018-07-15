@@ -48,6 +48,16 @@ Day basically stores ids: for User, Tasks , Services. and normal Daate
 
      wither way create the adapter to show the first element with a different UI< task_cardview
 
+
+
+
+
+     el recycler adapter : duplica valores
+     el user esta fijo en crear servicio
+
+     []edit service is givingtroubles
+
+
      * */
 
 

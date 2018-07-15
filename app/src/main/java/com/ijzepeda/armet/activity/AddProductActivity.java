@@ -39,6 +39,7 @@ public class AddProductActivity extends BaseActivity {
     EditText itemSerialNumberTextView;
     EditText itemNameTextView;
     EditText itemDescriptionTextView;
+    EditText itemFacturaTextView;
     int CAMERA_CODE = 111;
     FirebaseVisionBarcodeDetectorOptions barcodeOptions;
     DataSingleton singleton;
@@ -88,6 +89,7 @@ public class AddProductActivity extends BaseActivity {
         itemSerialNumberTextView = findViewById(R.id.productIdTextView);
         itemNameTextView = findViewById(R.id.productNameTextView);
         itemDescriptionTextView = findViewById(R.id.productDescriptionTextView);
+        itemFacturaTextView = findViewById(R.id.itemFacturaTextView);
 
         createProductBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,10 +242,13 @@ public class AddProductActivity extends BaseActivity {
         //Although Product.class will work fine with the rest of the app. Only on AddProduct is going to be used differently. wont upload, so that structure is not going to exists online.
 //        but it will upload a custom version of it, that holds only totalqty, but not local.
 
-
-        newProduct = new Product(itemSerialNumberTextView.getText().toString(),
-                itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
-                "image.url");
+//        itemFacturaTextView
+//                (String id, String name, String description, String factura, int qty, int localQty)
+//
+//        newProduct = new Product(itemSerialNumberTextView.getText().toString(),itemNameTextView.getText().toString(), itemDescriptionTextView.getText().toString(),
+        newProduct = new Product(itemSerialNumberTextView.getText().toString(),itemNameTextView.getText().toString(),
+                itemDescriptionTextView.getText().toString(),
+                itemFacturaTextView.getText().toString());
         singleton.setProducts(newProduct);
 
 

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Task"
+        android:text="Tarea"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <android.support.v4.widget.NestedScrollView
@@ -54,6 +54,20 @@
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/clientText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Cliente"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -64,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Accion"
-                    android:lines="5"
+                    android:lines="3"
                     android:maxLines="15" />
             </android.support.design.widget.TextInputLayout>
 
@@ -117,7 +131,7 @@
                     android:id="@+id/finalTimeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Hora Final"
+                    android:hint="Duracion (minutos)"
                     android:inputType="time"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -130,6 +144,6 @@
         android:id="@+id/saveTasktBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Done" />
+        android:text="Hecho" />
 
 </LinearLayout>

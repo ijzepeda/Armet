@@ -29,7 +29,7 @@ Context context;
 EditText startTimeTextView;
 EditText endTimeTextView;
 EditText placeTextView;
-EditText locationTextView;
+EditText clientTextView;
 EditText actionTextView;
 EditText tec1TextView;
 EditText tec2TextView;
@@ -84,6 +84,7 @@ com.firebase.ui.auth.data.model.User fbUser;
          startTimeTextView=findViewById(R.id.startTimeText);
          endTimeTextView=findViewById(R.id.finalTimeText);
          placeTextView=findViewById(R.id.placeText);
+        clientTextView=findViewById(R.id.clientText);
          actionTextView=findViewById(R.id.actionText);
          tec1TextView=findViewById(R.id.tec1Text);
          tec2TextView=findViewById(R.id.tec2Text);
@@ -129,6 +130,7 @@ com.firebase.ui.auth.data.model.User fbUser;
         task.setTec2Name(tec2TextView.getText().toString());
         task.setTec3Name(tec3TextView.getText().toString());
         task.setFinalTime(endTimeTextView.getText().toString());
+        task.setClient(clientTextView.getText().toString());
         Log.e(TAG, "createTask: taskaction"+task.getAction());
 
     }

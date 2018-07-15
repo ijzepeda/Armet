@@ -8,11 +8,53 @@ import java.util.ArrayList;
 public class Day implements Parcelable{
     String dayId;
     String date;
+    String userName;
+    ArrayList<Task> tasks;
+    ArrayList<Servicio>services;
     ArrayList<String> tasksIds=new ArrayList<>();
     ArrayList<String> clientServiceIds =new ArrayList<>();
     String userId;
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public ArrayList<Servicio> getServices() {
+        return services;
+    }
+
+    public void setServices(ArrayList<Servicio> services) {
+        this.services = services;
+    }
+
+    public static Creator<Day> getCREATOR() {
+        return CREATOR;
+    }
+
     public Day() {
+    }
+
+    public Day(String dayId, String date, String userName, ArrayList<Task> tasks, ArrayList<Servicio> services, ArrayList<String> tasksIds, ArrayList<String> clientServiceIds, String userId) {
+        this.dayId = dayId;
+        this.date = date;
+        this.userName = userName;
+        this.tasks = tasks;
+        this.services = services;
+        this.tasksIds = tasksIds;
+        this.clientServiceIds = clientServiceIds;
+        this.userId = userId;
     }
 
     public Day(String dayId, String date, ArrayList<String> tasksIds, ArrayList<String> clientServiceIds, String userId) {

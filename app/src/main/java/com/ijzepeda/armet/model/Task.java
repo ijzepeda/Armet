@@ -7,7 +7,7 @@ public class Task implements Parcelable {
     String id;
     int userId;
     String address;
-    String location;
+    String client;
     String action;
 
     String tec1Name;
@@ -28,11 +28,11 @@ public class Task implements Parcelable {
     public Task() {
     }
 
-    public Task(String id, int userId, String address, String location, String action, String tec1Name, int tec1Id, String tec2Name, int tec2Id, String tec3Name, int tec3Id, String finalTime, String startingTime, String date) {
+    public Task(String id, int userId, String address, String client, String action, String tec1Name, int tec1Id, String tec2Name, int tec2Id, String tec3Name, int tec3Id, String finalTime, String startingTime, String date) {
         this.id = id;
         this.userId = userId;
         this.address = address;
-        this.location = location;
+        this.client = client;
         this.action = action;
         this.tec1Name = tec1Name;
         this.tec1Id = tec1Id;
@@ -49,7 +49,7 @@ public class Task implements Parcelable {
         id = in.readString();
         userId = in.readInt();
         address = in.readString();
-        location = in.readString();
+        client = in.readString();
         action = in.readString();
         tec1Name = in.readString();
         tec1Id = in.readInt();
@@ -67,7 +67,7 @@ public class Task implements Parcelable {
         dest.writeString(id);
         dest.writeInt(userId);
         dest.writeString(address);
-        dest.writeString(location);
+        dest.writeString(client);
         dest.writeString(action);
         dest.writeString(tec1Name);
         dest.writeInt(tec1Id);
@@ -121,12 +121,12 @@ public class Task implements Parcelable {
         this.address = address;
     }
 
-    public String getLocation() {
-        return location;
+    public String getClient() {
+        return client;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setClient(String client) {
+        this.client = client;
     }
 
     public String getAction() {

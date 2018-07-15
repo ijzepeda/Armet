@@ -31,6 +31,7 @@ import com.ijzepeda.armet.adapter.ServicesAdapter;
 import com.ijzepeda.armet.adapter.TasksAdapter;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Day;
+import com.ijzepeda.armet.model.ExcelFile;
 import com.ijzepeda.armet.model.Servicio;
 import com.ijzepeda.armet.model.User;
 
@@ -93,8 +94,8 @@ public class MainActivity extends Activity {
     RecyclerView tasksRecyclerView;
     LinearLayoutManager llm2;
 
-
-
+private String correo = "";
+    String currentDateandTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,10 +131,11 @@ public class MainActivity extends Activity {
         day = new Day();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH:mm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
-        String currentDateandTime = sdf.format(new Date());
+         currentDateandTime = sdf.format(new Date());
 
         day.setDate(currentDateandTime);
         day.setUserId(currentUser.getId());
+        day.setUserName(user.getDisplayName());
         //everything else will be added later on SAVE DAY
         //TODO el id de day, lo podria generar con FECHA+ID
 
@@ -273,10 +275,27 @@ public class MainActivity extends Activity {
 
     public void saveDay() {
 //        databaseReference.push().setValue(day); UUID
+
+        //add objects on day, before will add them on firebase. else,
+        day.setServices(serviciosTotales);
+        day.setTasks(tasksTotales);
+
         databaseReference.child(day.getDate()+"_"+day.getUserId()).setValue(day);
         Toast.makeText(context, "Day saved. Clear and close. Salvar el dia, y presionar de nuevo para cerrar", Toast.LENGTH_SHORT).show();
         //todo, so far it will keep updating the day
+
+        createExcel();
+
     }
+
+    public void createExcel(){
+        ExcelFile excelFile=new ExcelFile(day);
+        excelFile.setName("Armet"+user.getDisplayName()+currentDateandTime);
+        excelFile.exportToExcel(day);
+        excelFile.sendExcelTo(context, correo);
+
+    }
+
 
     public void fetchServices() {
         //Need to clear list before fetching
@@ -310,10 +329,7 @@ public class MainActivity extends Activity {
             databaseTaskReference.child(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "fetch tasks onDataChange: "+dataSnapshot.toString() );
-                    Log.e(TAG, "fetch tasks onDataChange snapchot getvalue: "+dataSnapshot.getValue().toString() );
                     com.ijzepeda.armet.model.Task taskTemp= dataSnapshot.getValue(com.ijzepeda.armet.model.Task.class);
-                    Log.e(TAG, "onDataChange: TASK TO BE LOADED"+ taskTemp.getAction() );
                     tasksTotales.add(taskTemp);
                     taskAdapter.notifyDataSetChanged();
                 }
@@ -378,7 +394,7 @@ public class MainActivity extends Activity {
 
                     break;
                 case Activity.RESULT_CANCELED:
-                    Toast.makeText(context, "Something happened", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Algo paso", Toast.LENGTH_SHORT).show();
                     break;
 
             }

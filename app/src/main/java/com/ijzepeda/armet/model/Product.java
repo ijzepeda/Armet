@@ -7,7 +7,7 @@ public class Product implements Parcelable {
     String id;
     String name;
     String description;
-    String imageUrl;
+    String factura;
     int qty;
     int localQty; //never upload ON create
 
@@ -34,35 +34,35 @@ public class Product implements Parcelable {
         this.localQty += addQty;
     }
 
-    public Product(String id, String name, String description, String imageUrl, int qty) {
+    public Product(String id, String name, String description, String factura, int qty) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.factura = factura;
         this.qty = qty;
     }
 
-    public Product(String id, String name, String description, String imageUrl, int qty, int localQty) {
+    public Product(String id, String name, String description, String factura, int qty, int localQty) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.factura = factura;
         this.qty = qty;
         this.localQty = localQty;
     }
 
-    public Product(String id, String name, String description, String imageUrl) {
+    public Product(String id, String name, String description, String factura) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.imageUrl = imageUrl;
+        this.factura = factura;
     }
 
     protected Product(Parcel in) {
         id = in.readString();
         name = in.readString();
         description = in.readString();
-        imageUrl = in.readString();
+        factura = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -101,12 +101,12 @@ public class Product implements Parcelable {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getFactura() {
+        return factura;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setFactura(String factura) {
+        this.factura = factura;
     }
 
     @Override
@@ -119,6 +119,6 @@ public class Product implements Parcelable {
         dest.writeString(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeString(imageUrl);
+        dest.writeString(factura);
     }
 }
