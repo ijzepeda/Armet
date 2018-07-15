@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
     RecyclerView tasksRecyclerView;
     LinearLayoutManager llm2;
 
-private String correo = "";
+private String correo = "ijzepeda@hotmail.com";
     String currentDateandTime;
 
     @Override
@@ -130,7 +130,7 @@ private String correo = "";
     public void createDay() {
         day = new Day();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH:mm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-HHmm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
          currentDateandTime = sdf.format(new Date());
 
         day.setDate(currentDateandTime);
@@ -289,10 +289,20 @@ private String correo = "";
     }
 
     public void createExcel(){
-        ExcelFile excelFile=new ExcelFile(day);
-        excelFile.setName("Armet"+user.getDisplayName()+currentDateandTime);
-        excelFile.exportToExcel(day);
-        excelFile.sendExcelTo(context, correo);
+
+        Runnable task = new Runnable() {
+            public void run() {
+                /* Do something… */
+                ExcelFile excelFile=new ExcelFile(day);
+                excelFile.setName("Armet"+user.getDisplayName()+currentDateandTime);
+excelFile.setEmail(correo);
+excelFile.setContext(context);
+                excelFile.exportToExcel(day);
+//                excelFile.sendExcelTo(context, correo);
+
+            }
+        };
+        task.run();
 
     }
 

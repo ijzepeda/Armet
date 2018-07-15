@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ public class ExcelFile {
     Day day;
     String path;
     String name;
+    String email;
+    Context context;
 Uri uriPath;
     public ExcelFile(Day day) {
         this.day = day;
@@ -34,6 +37,22 @@ Uri uriPath;
         this.day = day;
         this.path = path;
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public Day getDay() {
@@ -87,7 +106,8 @@ Uri uriPath;
         Log.e("exportExcel", "+++++exportToExcel: "+directory.toString() );
         //file path
         File file = new File(directory, name);
-uriPath=Uri.fromFile(file);
+            uriPath=Uri.fromFile(file);
+
         WorkbookSettings wbSettings = new WorkbookSettings();
         wbSettings.setLocale(new Locale("es", "MX"));
         WritableWorkbook workbook;
@@ -139,12 +159,6 @@ uriPath=Uri.fromFile(file);
             WritableSheet sheet2 = workbook.createSheet("Productos", 1);
 
             try {
-                String id;
-                String name;
-                String description;
-                String factura;
-                int qty;
-                int localQty;
 
                 sheet2.addCell(new Label(0, 0, "No. de Serie")); // column and row
                 sheet2.addCell(new Label(1, 0, "Producto"));
@@ -182,13 +196,15 @@ uriPath=Uri.fromFile(file);
             workbook.write();
             try {
                 workbook.close();
+                Log.e(TAG, "exportToExcel: about to send email" );
+                sendExcelTo();
             } catch (WriteException e) {
                 e.printStackTrace();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
 
 
@@ -199,16 +215,36 @@ uriPath=Uri.fromFile(file);
 
     public void sendExcelTo(Context context, String email){
 //        Toast.makeText(context, "your excel file is ready"+email, Toast.LENGTH_SHORT).show();
-        Intent emailIntent=new Intent(Intent.ACTION_SENDTO);
+        Intent emailIntent=new Intent(Intent.ACTION_SEND);
 //        emailInten.
-        emailIntent .setType("vnd.android.cursor.dir/email");
+//        emailIntent .setType("vnd.android.cursor.dir/email");
+        emailIntent.setType("text/plain");
+
         String to[] = {email};
         emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
 // the attachment
-        emailIntent .putExtra(Intent.EXTRA_STREAM, path);
+        emailIntent .putExtra(Intent.EXTRA_STREAM, uriPath);
 // the mail subject
         emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Actividades de "+day.getUserName()+" del dia "+day.getDate());
         context.startActivity(Intent.createChooser(emailIntent , "Enviando Datos..."));
+    }
+
+
+    public void sendExcelTo(){
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+//        Toast.makeText(context, "your excel file is ready"+email, Toast.LENGTH_SHORT).show();
+        Intent emailIntent=new Intent(Intent.ACTION_SEND);
+//        emailInten.
+//        emailIntent .setType("vnd.android.cursor.dir/email");
+        emailIntent.setType("text/plain");
+        String to[] = {email};
+        emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
+// the attachment
+        emailIntent .putExtra(Intent.EXTRA_STREAM, uriPath);
+// the mail subject
+        emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Actividades de "+day.getUserName()+" del dia "+day.getDate());
+        context.startActivity(Intent.createChooser(emailIntent , "Selecciona App de correo."));
     }
 
 }
