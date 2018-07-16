@@ -55,6 +55,8 @@ public class AddServiceActivity extends BaseActivity {
     TextView serviceIdTextView;
     TextView serviceNameTextView;
     ImageButton photoButton;
+    ImageButton addClientButton;
+    Spinner clientSpinner;
 
     RecyclerView selectedProductsRecyclerView;
     LinearLayoutManager layoutManager;
@@ -196,6 +198,17 @@ public class AddServiceActivity extends BaseActivity {
 
             }
         });
+
+        addClientButton=findViewById(R.id.addClientButton);
+        clientSpinner=findViewById(R.id.clientSpinner);
+
+        addClientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, CreateClientActivity.class));
+            }
+        });
+
     }
 
 

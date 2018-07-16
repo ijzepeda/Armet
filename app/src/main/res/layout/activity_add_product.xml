@@ -20,7 +20,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -37,13 +37,10 @@
 
         <ImageButton
             android:id="@+id/cameraButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginTop="-5dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|center"
+            android:background="@drawable/baseline_camera_alt_white_48" />
 
     </LinearLayout>
 
@@ -57,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre"
+            android:inputType="textCapWords"
             android:maxLines="1"
             android:minLines="1"
             android:singleLine="true" />
@@ -89,6 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Descripcion"
+            android:inputType="textCapSentences"
             android:lines="5"
             android:maxLines="15" />
 
@@ -101,8 +100,10 @@
 
     <Button
         android:id="@+id/createProductBtn"
+        style="@style/FirebaseUI.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar Producto" />
+        android:text="Agregar Producto"
+        android:textColor="@color/white" />
 
 </LinearLayout>

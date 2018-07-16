@@ -1,18 +1,27 @@
 package com.ijzepeda.armet.activity;
 
+import android.Manifest;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,7 +73,6 @@ public class MainActivity extends Activity {
     LinearLayout serviceLayout;
 
 
-
     DataSingleton dataSingleton;
     User currentUser;
     com.firebase.ui.auth.data.model.User fbUser;
@@ -94,17 +102,31 @@ public class MainActivity extends Activity {
     RecyclerView tasksRecyclerView;
     LinearLayoutManager llm2;
 
-private String correo = "ijzepeda@hotmail.com";
+    private String correo = "ijzepeda@hotmail.com";
     String currentDateandTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar == null) {
+            throw new Error("Can't find tool bar, did you forget to add it in Activity layout file?");
+        }
+
+        setActionBar(toolbar);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
+//getActionBar().setHomeButtonEnabled(true);
+//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+//getActionBar().setTitle("ARMET");
+
+
         context = this;
         user = FirebaseAuth.getInstance().getCurrentUser();
         dataSingleton = DataSingleton.getInstance();
-
+        askPermissions();
         initFirebase();
         setupUser();
         createDay();
@@ -114,6 +136,34 @@ private String correo = "ijzepeda@hotmail.com";
         fetchServices();
 
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+//                Toast.makeText(context, "LOGOUT", Toast.LENGTH_SHORT).show();
+                AuthUI.getInstance()
+                        .signOut(context)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                logoutBtn.setText("Cerrar sesion ");
+                                finish();
+                                // ...
+                            }
+                        });
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
 
     public void initFirebase() {
         app = FirebaseApp.getInstance();
@@ -131,7 +181,7 @@ private String correo = "ijzepeda@hotmail.com";
         day = new Day();
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-HHmm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
-         currentDateandTime = sdf.format(new Date());
+        currentDateandTime = sdf.format(new Date());
 
         day.setDate(currentDateandTime);
         day.setUserId(currentUser.getId());
@@ -167,22 +217,21 @@ private String correo = "ijzepeda@hotmail.com";
         servicesRecyclerView.setAdapter(servicesAdapter);
 
         //set adapter for tasks
-        tasksRecyclerView=findViewById(R.id.tasksRecyclerView);
+        tasksRecyclerView = findViewById(R.id.tasksRecyclerView);
         llm2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         tasksRecyclerView.setLayoutManager(llm2);
-        taskAdapter=new TasksAdapter(context,tasksTotales);
+        taskAdapter = new TasksAdapter(context, tasksTotales);
         tasksRecyclerView.setAdapter(taskAdapter);
         taskAdapter.notifyDataSetChanged();
 
 
-        emptyServiceLayout=findViewById(R.id.emptyServiceLayout);
-        emptyTaskLayout=findViewById(R.id.emptyTaskLayout);
-        taskLayout=findViewById(R.id.taskLayout);
-        serviceLayout=findViewById(R.id.serviceLayout);
+        emptyServiceLayout = findViewById(R.id.emptyServiceLayout);
+        emptyTaskLayout = findViewById(R.id.emptyTaskLayout);
+        taskLayout = findViewById(R.id.taskLayout);
+        serviceLayout = findViewById(R.id.serviceLayout);
 
         taskLayout.setVisibility(View.GONE);
         serviceLayout.setVisibility(View.GONE);
-
 
 
         logoutBtn = findViewById(R.id.logoutBtn);
@@ -195,7 +244,8 @@ private String correo = "ijzepeda@hotmail.com";
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             public void onComplete(@NonNull Task<Void> task) {
                                 logoutBtn.setText("Logout ");
-                                finish();  // ...
+                                finish();
+                                // ...
                             }
                         });
 
@@ -228,41 +278,41 @@ private String correo = "ijzepeda@hotmail.com";
         });
 
 
+        addTaskBigButton = findViewById(R.id.addTaskBigButton);
+        addServiceBigButton = findViewById(R.id.addServiceBigButton);
 
-         addTaskBigButton=findViewById(R.id.addTaskBigButton);
-         addServiceBigButton=findViewById(R.id.addServiceBigButton);
-
-         addTaskBigButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 addTask();
-             }
-         });
+        addTaskBigButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addTask();
+            }
+        });
 
         addServiceBigButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 addService();
+            @Override
+            public void onClick(View v) {
+                addService();
 
-             }
-         });
+            }
+        });
 
 
     }
-    public void addService(){
+
+    public void addService() {
 
         Intent productIntent = new Intent(context, AddServiceActivity.class);
         productIntent.putExtra(EXTRA_CLIENT_NAME, "CORAL & MARINA"); //todo borrar
         productIntent.putExtra(EXTRA_CLIENT_ID, "123");
         startActivityForResult(productIntent, REQUEST_SERVICE);
     }
-    public void addTask(){
+
+    public void addTask() {
         Intent intent = new Intent(context, EditTaskActivity.class);
         intent.putExtra("user", "IvaNZepedA");
 
         startActivityForResult(intent, RESULT_TASK);
     }
-
 
 
     public void verifyData() {
@@ -280,23 +330,23 @@ private String correo = "ijzepeda@hotmail.com";
         day.setServices(serviciosTotales);
         day.setTasks(tasksTotales);
 
-        databaseReference.child(day.getDate()+"_"+day.getUserId()).setValue(day);
+        databaseReference.child(day.getDate() + "_" + day.getUserId()).setValue(day);
         Toast.makeText(context, "Day saved. Clear and close. Salvar el dia, y presionar de nuevo para cerrar", Toast.LENGTH_SHORT).show();
         //todo, so far it will keep updating the day
-
-        createExcel();
+askPermissions();
+       createExcel();
 
     }
 
-    public void createExcel(){
+    public void createExcel() {
 
         Runnable task = new Runnable() {
             public void run() {
                 /* Do something… */
-                ExcelFile excelFile=new ExcelFile(day);
-                excelFile.setName("Armet"+user.getDisplayName()+currentDateandTime);
-excelFile.setEmail(correo);
-excelFile.setContext(context);
+                ExcelFile excelFile = new ExcelFile(day);
+                excelFile.setName("Armet-" + user.getDisplayName() + currentDateandTime);
+                excelFile.setEmail(correo);
+                excelFile.setContext(context);
                 excelFile.exportToExcel(day);
 //                excelFile.sendExcelTo(context, correo);
 
@@ -306,11 +356,52 @@ excelFile.setContext(context);
 
     }
 
+private static final int WRITE_PERMISSION_CODE=1;
+    public void askPermissions(){
+
+
+// Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "askPermissions: 1" );
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Log.e(TAG, "askPermissions: 2" );
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_CODE);
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+                Log.e(TAG, "askPermissions: 3" );
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        WRITE_PERMISSION_CODE);
+//askPermissions();
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else{
+            Log.e(TAG, "askPermissions: 4" );
+           // createExcel();
+
+        }
+
+
+
+    }
 
     public void fetchServices() {
         //Need to clear list before fetching
 //serviciosTotales=new ArrayList<>();
 //fetch services from FB add them to arraylist
+        serviciosTotales.clear();
         for (String serviceId : serviceList) {
             databaseServiceReference.child(serviceId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -334,12 +425,12 @@ excelFile.setContext(context);
     public void fetchTasks() {
         //todo trabajar aqui para mostrar los elementos en el adapter
 //        tasksTotales=new ArrayList<>();
-
-        for(String taskId: taskList){
+        tasksTotales.clear();
+        for (String taskId : taskList) {
             databaseTaskReference.child(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    com.ijzepeda.armet.model.Task taskTemp= dataSnapshot.getValue(com.ijzepeda.armet.model.Task.class);
+                    com.ijzepeda.armet.model.Task taskTemp = dataSnapshot.getValue(com.ijzepeda.armet.model.Task.class);
                     tasksTotales.add(taskTemp);
                     taskAdapter.notifyDataSetChanged();
                 }
@@ -350,10 +441,6 @@ excelFile.setContext(context);
                 }
             });
         }
-
-
-
-
 
 
     }
@@ -373,7 +460,7 @@ excelFile.setContext(context);
 
 
                     String taskid = data.getStringExtra(EXTRA_TASK_ID);
-                    Log.e(TAG, "onActivityResult: task result id"+taskid );
+                    Log.e(TAG, "onActivityResult: task result id" + taskid);
 
                     taskList.add(taskid);
                     day.setTask(taskid);
@@ -395,7 +482,7 @@ excelFile.setContext(context);
 
                     // Servicio service = singleton.getService(data.getStringExtra(SERVICE_ID)); // no hace falta de singleton. ya lo leera de servidor
 //ad data.getStringExtra(SERVICE_ID) to list, and fill the adapter with the objects from that list
-                   // serviciosTotales=new ArrayList<>();
+                    // serviciosTotales=new ArrayList<>();
                     String serviceId = data.getStringExtra(SERVICE_ID);
                     serviceList.add(serviceId); //to store on firebase DayObject
                     day.setService(serviceId);

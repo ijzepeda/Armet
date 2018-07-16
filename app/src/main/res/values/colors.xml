@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <color name="colorPrimary">#F44336</color>
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#e52329</color>
     <color name="armetRed">#e52329</color>
     <color name="armetGray">#918f90</color>
     <color name="armetDarkGray">#515151</color>
+    <color name="armetLightGray">#898989</color>
+    <color name="darkText">#111111</color>
+    <color name="grayText">#515151</color>
+
+
+    <!--<color name="primary">#009688</color>-->
+    <!--<color name="primary_dark">#00796B</color>-->
+    <color name="primary_light">#B2DFDB</color>
+    <color name="accent">#ff5252</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <!---->
+    <color name="primary">#F44336</color>
+    <color name="primary_dark">#D32F2F</color>
+    <!--<color name="primary_light">#FFCDD2</color>-->
+    <!--<color name="accent">#FFC107</color>-->
+    <!--<color name="primary_text">#212121</color>-->
+    <!--<color name="secondary_text">#757575</color>-->
+    <!--<color name="icons">#FFFFFF</color>-->
+    <!--<color name="divider">#BDBDBD</color>-->
 
 
     <color name="colorWhite">#FFFFFF</color>

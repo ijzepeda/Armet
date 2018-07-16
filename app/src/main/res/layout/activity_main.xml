@@ -5,7 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context=".activity.MainActivity">
+
+    <android.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:titleTextColor="@color/white"
+
+        android:elevation="4dp"
+        />
 
     <LinearLayout
         android:id="@+id/emptyTaskLayout"
@@ -28,6 +39,7 @@
             android:id="@+id/addTaskBigButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:src="@drawable/baseline_playlist_add_white_18dp" />
     </LinearLayout>
 
@@ -42,7 +54,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/tasksRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             tools:listitem="@layout/task_list_item">
 
@@ -50,9 +62,15 @@
 
         <Button
             android:id="@+id/newTaskBtn"
-            android:layout_width="match_parent"
+            style="@style/FirebaseUI.Button.AccountChooser.TwitterButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Task" />
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:layout_marginBottom="-5dp"
+            android:layout_marginTop="-5dp"
+            android:elevation="2dp"
+            android:text="NUEVA TAREA" />
 
     </LinearLayout>
     <LinearLayout
@@ -75,6 +93,7 @@
             android:id="@+id/addServiceBigButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:src="@drawable/baseline_note_add_white_18dp" />
     </LinearLayout>
 
@@ -90,27 +109,37 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/serviciosRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             tools:listitem="@layout/service_list_item" />
 
         <Button
             android:id="@+id/addServiceBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_service" />
+            style="@style/FirebaseUI.Button.AccountChooser.TwitterButton"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-5dp"
+            android:elevation="2dp"
+            android:text="@string/add_service"
+            android:textAlignment="center" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/finishDaybtn"
+        style="@style/FirebaseUI.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Finish Day" />
+        android:layout_marginBottom="-10dp"
+        android:layout_marginTop="-5dp"
+        android:text="Terminar dia" />
 
     <Button
         android:id="@+id/logoutBtn"
+        style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout session of - " />
+        android:layout_marginBottom="-5dp"
+        android:text="Logout session of - "
+        android:visibility="gone"/>
 </LinearLayout>

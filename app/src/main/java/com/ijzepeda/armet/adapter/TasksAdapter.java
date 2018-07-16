@@ -98,7 +98,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.taskActionTextView.setText(task.getAction());
         holder.taskPlaceTextView.setText(task.getAddress());
         holder.startTimeTextView.setText(task.getStartingTime());
-        holder.totalTimeTextView.setText(task.getFinalTime());
+        holder.totalTimeTextView.setText("("+task.getFinalTime()+" mins.)");
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -20,7 +20,7 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/clientSpinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,10 +28,10 @@
 
         <ImageButton
             android:id="@+id/addClientButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_add_white_18dp" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/baseline_add_white_18dp" />
 
     </LinearLayout>
 
@@ -42,7 +42,7 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="5"
             android:orientation="vertical">
 
@@ -57,11 +57,10 @@
 
         <ImageButton
             android:id="@+id/photoButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/baseline_camera_alt_white_48" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|center"
+            android:background="@drawable/baseline_camera_alt_white_48" />
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -119,21 +118,12 @@
 
         <ImageButton
             android:id="@+id/addProductButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/baseline_done_white_18dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
 
-            />
+            android:layout_gravity="center"
+            android:background="@drawable/baseline_done_white_18dp" />
     </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/selectedProductsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/product_list_item">
-
-    </android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/HiddenaddProductBtn"
@@ -144,9 +134,23 @@
 
     <Button
         android:id="@+id/addNewProductBtn"
-        android:layout_width="match_parent"
+        style="@android:style/Widget.Material.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-5dp"
+        android:layout_marginTop="-5dp"
+        android:gravity="center"
         android:text="Agregar Nuevo Producto" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/selectedProductsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/product_list_item">
+
+    </android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/addServiceBtn"
