@@ -1,7 +1,6 @@
 package com.ijzepeda.armet.activity;
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -106,6 +104,30 @@ public class MainActivity extends Activity {
     String currentDateandTime;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataSingleton=  DataSingleton.loadSingleton(context);
+        day= dataSingleton.getDay();
+        if(day==null) {
+            createDay();
+            Log.e(TAG, "onCreate: createing new day as singleton was empty" );
+        }
+//        else{ //funciona pero a medias
+//            taskList.addAll(day.getTasksIds());
+//             tasksTotales.addAll(day.getTasks());
+//            taskAdapter.notifyDataSetChanged();
+//            serviceList.addAll(day.getClientServiceIds());
+//             serviciosTotales.addAll(day.getServices());
+//            servicesAdapter.notifyDataSetChanged();
+//        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -114,26 +136,56 @@ public class MainActivity extends Activity {
         if (toolbar == null) {
             throw new Error("Can't find tool bar, did you forget to add it in Activity layout file?");
         }
-
+        if (savedInstanceState != null) {
+            day = savedInstanceState.getParcelable("day");
+        }
         setActionBar(toolbar);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().setHomeButtonEnabled(true);
-//getActionBar().setHomeButtonEnabled(true);
-//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-//getActionBar().setTitle("ARMET");
-
 
         context = this;
         user = FirebaseAuth.getInstance().getCurrentUser();
-        dataSingleton = DataSingleton.getInstance();
+        //dataSingleton = DataSingleton.getInstance();
+        dataSingleton=  DataSingleton.loadSingleton(context);
+
         askPermissions();
         initFirebase();
         setupUser();
-        createDay();
-
-//singleton.getInstance(context);
         initComponents();
         fetchServices();
+        createDate();
+        //Log.e(TAG, "onCreate dataSingleton.getDay().getDate(): "+dataSingleton.getDay().getDate() );
+
+        day= dataSingleton.getDay();
+
+        if(day==null || !day.getDate().equals(currentDateandTime)) {
+            dataSingleton.clearSingleton(context);//just to be sure: delete data on singleton
+            createDay();
+            Log.e(TAG, "onCreate: creating new day as singleton was empty" );
+        } else{
+
+            taskList.addAll(day.getTasksIds());
+            if(taskList.size()>0) {
+                fetchTasks();
+                taskAdapter.notifyDataSetChanged();
+
+                taskLayout.setVisibility(View.VISIBLE);
+                emptyTaskLayout.setVisibility(View.GONE);
+            }
+
+            serviceList.addAll(day.getClientServiceIds());
+            if(serviceList.size()>0) {
+                fetchServices();
+                servicesAdapter.notifyDataSetChanged();
+
+                emptyServiceLayout.setVisibility(View.GONE);
+                serviceLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+//singleton.getInstance(context);
+
+        verifyDate();   //
+
+
 
     }
 
@@ -163,7 +215,15 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        outState.putParcelableArrayList("day", day);
+        outState.putParcelable("day",day);
+        Log.e(TAG, "onSaveInstanceState: "+day.getUserName() );
+        servicesAdapter.notifyDataSetChanged();
+        taskAdapter.notifyDataSetChanged();
+        super.onSaveInstanceState(outState);
+    }
 
     public void initFirebase() {
         app = FirebaseApp.getInstance();
@@ -176,19 +236,41 @@ public class MainActivity extends Activity {
 
     }
 
+public void createDate(){
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd"); //TODO -HHmm si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
+    currentDateandTime = sdf.format(new Date());
+    Log.e(TAG, "todays date is: "+currentDateandTime );
+
+}
 
     public void createDay() {
         day = new Day();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm"); //TODO so far will add todays date. but I might add a button to add manually the user
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-HHmm"); //TODO  si dejo diagonales separa bonito en dia, pero para hacer un armado de excel creo que debo hacer un for mas
-        currentDateandTime = sdf.format(new Date());
-
         day.setDate(currentDateandTime);
         day.setUserId(currentUser.getId());
         day.setUserName(user.getDisplayName());
         //everything else will be added later on SAVE DAY
         //TODO el id de day, lo podria generar con FECHA+ID
 
+    }
+
+    /***
+     * if it is a different date, it will delete previous saved data.
+     * If it is the same day, then it will load everything that hs been done by the same user
+     *
+     * compare:
+     * user
+     * date
+     *
+     */
+    public void verifyDate(){
+
+       // currentDateandTime dataSingleton.getDay().getDate();
+
+    }
+    public void updateDay(){
+        dataSingleton.updateDay(day);
     }
 
     public void setupUser() {
@@ -331,7 +413,7 @@ public class MainActivity extends Activity {
         day.setTasks(tasksTotales);
 
         databaseReference.child(day.getDate() + "_" + day.getUserId()).setValue(day);
-        Toast.makeText(context, "Day saved. Clear and close. Salvar el dia, y presionar de nuevo para cerrar", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Creando archivo para enviar por correo.", Toast.LENGTH_LONG).show();
         //todo, so far it will keep updating the day
 askPermissions();
        createExcel();
@@ -342,14 +424,11 @@ askPermissions();
 
         Runnable task = new Runnable() {
             public void run() {
-                /* Do something… */
                 ExcelFile excelFile = new ExcelFile(day);
                 excelFile.setName("Armet-" + user.getDisplayName() + currentDateandTime);
                 excelFile.setEmail(correo);
                 excelFile.setContext(context);
                 excelFile.exportToExcel(day);
-//                excelFile.sendExcelTo(context, correo);
-
             }
         };
         task.run();
@@ -359,37 +438,20 @@ askPermissions();
 private static final int WRITE_PERMISSION_CODE=1;
     public void askPermissions(){
 
-
-// Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "askPermissions: 1" );
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 Log.e(TAG, "askPermissions: 2" );
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_CODE);
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
             } else {
-                Log.e(TAG, "askPermissions: 3" );
-                // No explanation needed, we can request the permission.
-
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         WRITE_PERMISSION_CODE);
-//askPermissions();
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }else{
-            Log.e(TAG, "askPermissions: 4" );
-           // createExcel();
 
         }
 
@@ -406,7 +468,6 @@ private static final int WRITE_PERMISSION_CODE=1;
             databaseServiceReference.child(serviceId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "fetch services onDataChange: " + dataSnapshot.toString());
                     Servicio servicioTemp = dataSnapshot.getValue(Servicio.class);
                     serviciosTotales.add(servicioTemp);
                     servicesAdapter.notifyDataSetChanged();
@@ -460,11 +521,13 @@ private static final int WRITE_PERMISSION_CODE=1;
 
 
                     String taskid = data.getStringExtra(EXTRA_TASK_ID);
-                    Log.e(TAG, "onActivityResult: task result id" + taskid);
 
                     taskList.add(taskid);
                     day.setTask(taskid);
                     fetchTasks();
+
+                    dataSingleton.updateDay(day);
+                    dataSingleton.update(context);
 
                     break;
                 case Activity.RESULT_CANCELED:
@@ -488,6 +551,8 @@ private static final int WRITE_PERMISSION_CODE=1;
                     day.setService(serviceId);
 
                     fetchServices();
+                    dataSingleton.updateDay(day);
+                    dataSingleton.update(context);
 
                     break;
                 case Activity.RESULT_CANCELED:

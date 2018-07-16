@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.activity.AddProductActivity;
 import com.ijzepeda.armet.activity.AddServiceActivity;
+import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
 import com.ijzepeda.armet.model.Servicio;
 
@@ -55,8 +57,9 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Deleting "+servicio.getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Deleting "+servicio.getName(), Toast.LENGTH_SHORT).show();
                 removeAt(holder.getAdapterPosition());
+
             }
         });
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,9 +75,16 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.ViewHo
 
     public void removeAt(int position) {
 //        mData.get(position).setLocalQty(0);
+        //DataSingleton.getInstance().removeService(mData.get(position));
+DataSingleton singleton = DataSingleton.loadSingleton(context);
+        Log.e("service adapter", "about to remove : "+singleton.getService(mData.get(position).getId()) );
+singleton.removeService(mData.get(position));
+        Log.e("serviceAdapter", "removeAt eleemten : "+mData.get(position).getName() );
         mData.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, mData.size());
+//DataSingleton.getInstance().setServices(mData);
+        DataSingleton.getInstance().update(context);
     }
 
     // total number of rows

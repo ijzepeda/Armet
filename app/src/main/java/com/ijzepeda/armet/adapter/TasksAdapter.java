@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.activity.AddServiceActivity;
+import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Servicio;
 import com.ijzepeda.armet.model.Task;
 
@@ -104,6 +105,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             public void onClick(View v) {
                 Toast.makeText(context, "Deleting " + task.getAction(), Toast.LENGTH_SHORT).show();
                 removeAt(holder.getAdapterPosition());
+
             }
         });
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
@@ -119,9 +121,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
 
     public void removeAt(int position) {
 //        mData.get(position).setLocalQty(0);
+        DataSingleton.getInstance().removeTask(mData.get(position));
         mData.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, mData.size());
+        DataSingleton.getInstance().update(context);
     }
 
     // total number of rows

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.activity.AddProductActivity;
+import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Product;
 
 import java.util.List;
@@ -54,8 +55,9 @@ public class ProductsAdapter  extends RecyclerView.Adapter<ProductsAdapter.ViewH
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Deleting "+product.getName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Deleting "+product.getName(), Toast.LENGTH_SHORT).show();
                 removeAt(holder.getAdapterPosition());
+                DataSingleton.getInstance().update(context);
             }
         });
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +67,7 @@ public class ProductsAdapter  extends RecyclerView.Adapter<ProductsAdapter.ViewH
                 productIntent.putExtra(EXTRA_EDIT_PRODUCT,product.getId() );
                 productIntent.putExtra(EXTRA_EDITING_PRODUCT,true);
                 context.startActivity(productIntent);
+
             }
         });
     }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,6 +44,7 @@ FirebaseDatabase database;
 FirebaseAuth auth;
 FirebaseStorage storage;
 DatabaseReference databaseReference;
+FirebaseUser firebaseUser;
 
 DataSingleton singleton;
 User user;
@@ -76,6 +78,8 @@ com.firebase.ui.auth.data.model.User fbUser;
         auth=FirebaseAuth.getInstance(app);
         storage=FirebaseStorage.getInstance(app);
         databaseReference=database.getReference("task");
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
@@ -87,6 +91,7 @@ com.firebase.ui.auth.data.model.User fbUser;
         clientTextView=findViewById(R.id.clientText);
          actionTextView=findViewById(R.id.actionText);
          tec1TextView=findViewById(R.id.tec1Text);
+         tec1TextView.setText(firebaseUser.getDisplayName());
          tec2TextView=findViewById(R.id.tec2Text);
          tec3TextView=findViewById(R.id.tec3Text);
          doneBtn=findViewById(R.id.saveTasktBtn);
@@ -149,6 +154,7 @@ com.firebase.ui.auth.data.model.User fbUser;
         Log.e(TAG, "saveTask id: "+task.getAction() );
 
 
+        singleton.setTask(task);
 
         Intent intent = getIntent();
         intent.putExtra(EXTRA_TASK_ID, task.getId());
