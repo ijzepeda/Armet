@@ -11,7 +11,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Servicio" />
+        android:text="Lista de productos" />
 
 
     <LinearLayout
@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+
             android:gravity="center_vertical|fill_vertical" />
 
         <ImageButton
@@ -50,7 +51,7 @@
                 android:id="@+id/serviceIdTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="No. Servicio (Puedes tomar foto)"
+                android:hint="No. de Lista de Prodcutos"
                 android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
@@ -60,7 +61,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal|center"
-            android:background="@drawable/baseline_camera_alt_white_48" />
+            android:background="@drawable/baseline_camera_alt_white_48"
+            android:visibility="gone" />
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -72,7 +74,7 @@
             android:id="@+id/serviceNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del Servicio"
+            android:hint="Nombre de Lista de productos"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>

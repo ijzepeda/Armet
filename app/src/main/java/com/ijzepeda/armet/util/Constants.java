@@ -48,6 +48,7 @@ public class Constants {
 
     public static final String PRODUCT_ID ="productId";
     public static final String SERVICE_ID ="serviceId";
+    public static final String CLIENT_ID ="clientId";
 
 
     public static final String EXTRA_EDIT_SERVICE ="editService";

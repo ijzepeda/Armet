@@ -136,7 +136,14 @@ public static DataSingleton loadSingleton(Context context){
     public void setClients(Map<String, Client> clients) {
         this.clients = clients;
     }
+public void setClient(Client client){
+clients.put(client.getId(),client);
+}
 
+public Client getClient(String id){
+
+        return clients.get(id);
+}
     public Product getProduct(String id) {
         return products.get(id);
     }

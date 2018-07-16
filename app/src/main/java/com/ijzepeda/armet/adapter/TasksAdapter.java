@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.activity.AddServiceActivity;
+import com.ijzepeda.armet.activity.EditTaskActivity;
 import com.ijzepeda.armet.model.DataSingleton;
 import com.ijzepeda.armet.model.Servicio;
 import com.ijzepeda.armet.model.Task;
@@ -111,7 +112,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent productIntent = new Intent(context, AddServiceActivity.class);
+                Intent productIntent = new Intent(context, EditTaskActivity.class);
                 productIntent.putExtra(EXTRA_TASK_ID, task.getId());
                 productIntent.putExtra(EXTRA_EDITING_TASK, true);
                 context.startActivity(productIntent);

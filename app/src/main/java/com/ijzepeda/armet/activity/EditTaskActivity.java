@@ -3,6 +3,7 @@ package com.ijzepeda.armet.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,14 +15,24 @@ import android.widget.TextView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
 import com.ijzepeda.armet.model.DataSingleton;
+import com.ijzepeda.armet.model.Product;
+import com.ijzepeda.armet.model.Servicio;
 import com.ijzepeda.armet.model.Task;
 import com.ijzepeda.armet.model.User;
 
+import java.util.ArrayList;
+
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDITING_SERVICE;
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDITING_TASK;
+import static com.ijzepeda.armet.util.Constants.EXTRA_EDIT_SERVICE;
 import static com.ijzepeda.armet.util.Constants.EXTRA_TASK_ID;
 
 public class EditTaskActivity extends AppCompatActivity {
@@ -47,28 +58,36 @@ DatabaseReference databaseReference;
 FirebaseUser firebaseUser;
 
 DataSingleton singleton;
-User user;
+//User user;
 com.firebase.ui.auth.data.model.User fbUser;
 
 
-//loading files if editing
+
+        //loading files if editing
     boolean editingTask=false;
     String taskId;
     private static final String TAG = "EditTaskActivity";
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
         context = this;
         singleton=DataSingleton.getInstance();
+        Intent intent = getIntent();
+        editingTask = intent.getBooleanExtra(EXTRA_EDITING_TASK, false);  //EXTRA_TASK_ID
+
         initFirebase();
-        getUser();
         initComponents();
 
-    }
+        if (editingTask) {
+            LoadEditService(intent.getStringExtra(EXTRA_TASK_ID));
+        }
 
-    public void getUser(){
-        user=singleton.getUser();
     }
 
 
@@ -104,6 +123,40 @@ com.firebase.ui.auth.data.model.User fbUser;
              }
          });
     }
+
+    public void LoadEditService(String id){
+        Log.e(TAG, "LoadEditService id: "+id );
+        DatabaseReference databaseCurrentServiceRef = databaseReference.child(id);
+        databaseCurrentServiceRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Task task= dataSnapshot.getValue(Task.class);
+                    //Product product = dataSnapshot.getValue(Product.class);
+                    fillFields(task);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void fillFields(Task task) {
+        Log.e(TAG, "fillFields: " );
+        startTimeTextView.setText(task.getStartingTime());
+        endTimeTextView.setText(task.getFinalTime());
+        placeTextView.setText(task.getAddress());
+        clientTextView.setText(task.getClient());
+        actionTextView.setText(task.getAction());
+        tec1TextView.setText(task.getTec1Name());
+        tec2TextView.setText(task.getTec2Name());
+        tec3TextView.setText(task.getTec3Name());
+
+    }
+
 
     public void verifyData(){
         boolean noError=true;

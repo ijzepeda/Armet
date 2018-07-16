@@ -384,8 +384,8 @@ public void createDate(){
     public void addService() {
 
         Intent productIntent = new Intent(context, AddServiceActivity.class);
-        productIntent.putExtra(EXTRA_CLIENT_NAME, "CORAL & MARINA"); //todo borrar
-        productIntent.putExtra(EXTRA_CLIENT_ID, "123");
+      //  productIntent.putExtra(EXTRA_CLIENT_NAME, "CORAL & MARINA"); //todo borrar
+        productIntent.putExtra(EXTRA_CLIENT_ID, "");
         startActivityForResult(productIntent, REQUEST_SERVICE);
     }
 

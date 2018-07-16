@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.ijzepeda.armet.R;
+import com.ijzepeda.armet.adapter.ClientSpinnerAdapter;
 import com.ijzepeda.armet.adapter.ProductBaseAdapter;
 import com.ijzepeda.armet.adapter.ProductsAdapter;
 import com.ijzepeda.armet.model.Client;
@@ -37,6 +38,7 @@ import com.ijzepeda.armet.model.Servicio;
 
 import java.util.ArrayList;
 
+import static com.ijzepeda.armet.util.Constants.CLIENT_ID;
 import static com.ijzepeda.armet.util.Constants.EXTRA_CLIENT_ID;
 import static com.ijzepeda.armet.util.Constants.EXTRA_CLIENT_NAME;
 import static com.ijzepeda.armet.util.Constants.EXTRA_EDITING_SERVICE;
@@ -55,8 +57,6 @@ public class AddServiceActivity extends BaseActivity {
     TextView serviceIdTextView;
     TextView serviceNameTextView;
     ImageButton photoButton;
-    ImageButton addClientButton;
-    Spinner clientSpinner;
 
     RecyclerView selectedProductsRecyclerView;
     LinearLayoutManager layoutManager;
@@ -69,6 +69,13 @@ public class AddServiceActivity extends BaseActivity {
     ArrayList<Product> productsOnService;//>how to hold qty? on object, but neber sent
     ArrayList<Product> totalProductsList;
 //    ArrayList<String> productsNames;
+
+    //Clients
+    Spinner clientSpinner;
+    ImageButton addClientButton;
+    ArrayList<Client> clientList;
+    ClientSpinnerAdapter clientSpinnerAdapter;
+
 
     ImageButton addProductButton;
     EditText selectQtyProduct;
@@ -86,6 +93,14 @@ public class AddServiceActivity extends BaseActivity {
      */
 
     private static int PRODUCT_ADDED = 101;
+    private static int CLIENT_ADDED = 103;
+
+
+    public void updatingClient(){
+//        client.setId(intent.getStringExtra(EXTRA_CLIENT_ID));
+//        client.setName(intent.getStringExtra(EXTRA_CLIENT_NAME)); //se va a cambiar cuando se selecciones de la lista!
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +114,8 @@ public class AddServiceActivity extends BaseActivity {
         //todo get data from bundle, and receive client id
 //todo: ----------------if I receive a client id, then work from it. else, search from list
         client = new Client();
-        client.setId(intent.getStringExtra(EXTRA_CLIENT_ID));
-        client.setName(intent.getStringExtra(EXTRA_CLIENT_NAME));
-
-        Log.e(TAG, "onCreate client.getName(): " + client.getName());
+client.setId("000");
+client.setName("Selecciona un cliente.");
 
         initFirebase();
         getData();
@@ -115,7 +128,8 @@ public class AddServiceActivity extends BaseActivity {
 
     public void initComponents() {
         TextView title = findViewById(R.id.titleTextView);
-        title.setText("Servicio para " + ((client.getName() == null) ? " nuevo cliente" : client.getName()));
+        // title.setText("Servicio para " + ((client.getName() == null) ? " nuevo cliente" : client.getName()));
+
         selectQtyProduct = findViewById(R.id.selectQtyProduct);
         addServiceBtn = findViewById(R.id.addServiceBtn);
         addNewProduct = findViewById(R.id.addNewProductBtn);
@@ -199,15 +213,22 @@ public class AddServiceActivity extends BaseActivity {
             }
         });
 
-        addClientButton=findViewById(R.id.addClientButton);
-        clientSpinner=findViewById(R.id.clientSpinner);
-
+        addClientButton = findViewById(R.id.addClientButton);
         addClientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, CreateClientActivity.class));
+                Intent productIntent = new Intent(context, CreateClientActivity.class);
+                startActivityForResult(productIntent, CLIENT_ADDED);
+
             }
         });
+
+        clientSpinner = findViewById(R.id.clientSpinner);
+        clientSpinner.setPrompt("Selecciona un cliente");
+
+        clientSpinnerAdapter = new ClientSpinnerAdapter(this, clientList); //total products
+        clientSpinner.setAdapter(clientSpinnerAdapter);
+
 
     }
 
@@ -218,6 +239,7 @@ public class AddServiceActivity extends BaseActivity {
     FirebaseStorage storage;
     DatabaseReference databaseProductRef;
     DatabaseReference databaseServiceRef;
+    DatabaseReference databaseClientsRef;
 //    DatabaseReference databaseCurrentServiceRef;
 
     public void initFirebase() {
@@ -227,6 +249,7 @@ public class AddServiceActivity extends BaseActivity {
         storage = FirebaseStorage.getInstance(app);
         databaseServiceRef = database.getReference("service");
         databaseProductRef = database.getReference("products");
+        databaseClientsRef = database.getReference("client");
     }
 
 
@@ -280,6 +303,7 @@ public class AddServiceActivity extends BaseActivity {
         //todo, after creating a service, when creating a new service the previous localQty keeps prevs values
 //        totalProductsList = new ArrayList<>();
         productsOnService = new ArrayList<>();
+
 //        totalProductsList.addAll(singleton.getProductsList());
     }
 
@@ -312,6 +336,33 @@ public class AddServiceActivity extends BaseActivity {
         });
 
 
+        //fetch clients
+        clientList=new ArrayList<>();
+        clientList.add(client); //first client need to be grayed out
+
+
+        databaseClientsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.e(TAG, "onDataChange: Loading data from fb to list after update on list ");
+                Log.e("client Count ", "" + snapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Client client= postSnapshot.getValue(Client.class);
+                    if (!clientList.contains(client))
+                        clientList.add(client);
+                    Log.e(TAG, "onDataChange client loaded from database: " + client.getName());
+                }
+                clientSpinnerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("The read failed: ", databaseError.getMessage());
+            }
+        });
+
+
+
     }
 
     public void saveService() {
@@ -326,37 +377,37 @@ public class AddServiceActivity extends BaseActivity {
  * siempre y cuando se haya elegido antes. y no generado el numero de servicio*/
 
         //if(editingService) {
-            DatabaseReference mref = databaseServiceRef.child(service.getId());
-        Log.e(TAG, "saveService++1: " );
-            mref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "onDataChange: ++2" );
-                    if (dataSnapshot.exists() && !editingService) {
-                        Toast.makeText(context, "Ya existe ese numero de servicio", Toast.LENGTH_LONG).show();
-                    } else {
+        DatabaseReference mref = databaseServiceRef.child(service.getId());
+        Log.e(TAG, "saveService++1: ");
+        mref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "onDataChange: ++2");
+                if (dataSnapshot.exists() && !editingService) {
+                    Toast.makeText(context, "Ya existe ese numero de servicio", Toast.LENGTH_LONG).show();
+                } else {
 
-                        databaseServiceRef.child(service.getId()).setValue(service);
+                    databaseServiceRef.child(service.getId()).setValue(service);
 
-                        Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra(SERVICE_ID, service.getId());
-                        setResult(Activity.RESULT_OK, returnIntent);
-                        productsOnService.clear();
-                        productsOnService = null;
-                        singleton.update(context);
+                    Toast.makeText(context, "Servicio saved", Toast.LENGTH_SHORT).show();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(SERVICE_ID, service.getId());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    productsOnService.clear();
+                    productsOnService = null;
+                    singleton.update(context);
 
-                        finish();
-
-                    }
+                    finish();
 
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 //        }else{
 //            databaseServiceRef.pus
 //        }
@@ -384,6 +435,12 @@ public class AddServiceActivity extends BaseActivity {
          * upload this object it will save the products with every information on it,
          * rather than just the ID to fetch them later*/
         service = new Servicio();
+
+//        Product temp = (Product) spinner.getSelectedItem();//
+
+        //client will be updated from the selected one"
+        client = (Client)clientSpinner.getSelectedItem();
+
         service.setClientId(client.getId());
         service.setClientName(client.getName());
         service.setName(serviceNameTextView.getText().toString());
@@ -411,6 +468,22 @@ public class AddServiceActivity extends BaseActivity {
                     break;
                 case Activity.RESULT_CANCELED:
                     Toast.makeText(context, "Something happened", Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+
+        }
+        if (requestCode == CLIENT_ADDED) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    Client clientTemp = singleton.getClient(data.getStringExtra(CLIENT_ID));
+
+
+                   clientList.add(clientTemp);
+                   clientSpinnerAdapter.notifyDataSetChanged();
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Toast.makeText(context, "Algo paso", Toast.LENGTH_SHORT).show();
                     break;
 
             }

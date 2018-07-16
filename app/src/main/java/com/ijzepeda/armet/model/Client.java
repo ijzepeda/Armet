@@ -9,6 +9,7 @@ public class Client implements Parcelable {
     String address;
     String location;
     String phone;
+    String contactName;
 
     public Client() {
     }
@@ -21,12 +22,22 @@ public class Client implements Parcelable {
         this.phone = phone;
     }
 
+    public Client(String id, String name, String address, String location, String phone, String contactName) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        this.phone = phone;
+        this.contactName = contactName;
+    }
+
     protected Client(Parcel in) {
         id = in.readString();
         name = in.readString();
         address = in.readString();
         location = in.readString();
         phone = in.readString();
+        contactName = in.readString();
     }
 
     public static final Creator<Client> CREATOR = new Creator<Client>() {
@@ -81,6 +92,14 @@ public class Client implements Parcelable {
         this.phone = phone;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -93,5 +112,6 @@ public class Client implements Parcelable {
         dest.writeString(address);
         dest.writeString(location);
         dest.writeString(phone);
+        dest.writeString(contactName);
     }
 }
