@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="0dp"
-            android:layout_marginBottom="-5dp"
+            android:layout_marginBottom="-4dp"
             android:layout_marginTop="-5dp"
             android:elevation="2dp"
             android:text="NUEVA TAREA" />
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom|center_horizontal"
-            android:text="Agrega Un Servicio Nuevo"
+            android:text="Agrega Lista de Productos"
             android:textSize="18sp" />
 
         <ImageButton
@@ -118,8 +118,9 @@
             style="@style/FirebaseUI.Button.AccountChooser.TwitterButton"
             android:layout_width="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="0dp"
             android:layout_marginTop="-5dp"
-            android:elevation="2dp"
+            android:elevation="1dp"
             android:text="@string/add_service"
             android:textAlignment="center" />
 
@@ -132,7 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="-10dp"
         android:layout_marginTop="-5dp"
-        android:text="Terminar dia" />
+        android:text="Terminar dia [enviar datos]" />
 
     <Button
         android:id="@+id/logoutBtn"

@@ -100,7 +100,7 @@ public class MainActivity extends Activity {
     RecyclerView tasksRecyclerView;
     LinearLayoutManager llm2;
 
-    private String correo = "ijzepeda@hotmail.com";
+    private String correo = "administracion@armetsecurity.com";
     String currentDateandTime;
 
     @Override
@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
 
         askPermissions();
         initFirebase();
-        setupUser();
+//        setupUser();
         initComponents();
         fetchServices();
         createDate();
@@ -158,6 +158,7 @@ public class MainActivity extends Activity {
 
         if(day==null || !day.getDate().equals(currentDateandTime)) {
             dataSingleton.clearSingleton(context);//just to be sure: delete data on singleton
+            downloadDay();
             createDay();
             Log.e(TAG, "onCreate: creating new day as singleton was empty" );
         } else{
@@ -188,7 +189,10 @@ public class MainActivity extends Activity {
 
 
     }
+public void downloadDay(){
+        //todo fethc wholeday and put it here.
 
+}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -248,7 +252,7 @@ public void createDate(){
     public void createDay() {
         day = new Day();
         day.setDate(currentDateandTime);
-        day.setUserId(currentUser.getId());
+        day.setUserId(user.getUid());//currentUser.getId());
         day.setUserName(user.getDisplayName());
         //everything else will be added later on SAVE DAY
         //TODO el id de day, lo podria generar con FECHA+ID
@@ -275,14 +279,14 @@ public void createDate(){
 
     public void setupUser() {
 //        sincronizar con el user de firebase
-        currentUser = new User();
-        currentUser.setFirstName("Ivan");
-        currentUser.setLastName("Zepeda");
-        currentUser.setEmail("ijzepeda@hotmail.com");
-        currentUser.setPhone("7221767190");
-        currentUser.setId("1");
-        currentUser.setPosition("dev");
-        dataSingleton.setUser(currentUser);
+//        currentUser = new User();
+//        currentUser.setFirstName("Ivan");
+//        currentUser.setLastName("Zepeda");
+//        currentUser.setEmail("ijzepeda@hotmail.com");
+//        currentUser.setPhone("7221767190");
+//        currentUser.setId("1");
+//        currentUser.setPosition("dev");
+//        dataSingleton.setUser(currentUser);
     }
 
     public void initComponents() {

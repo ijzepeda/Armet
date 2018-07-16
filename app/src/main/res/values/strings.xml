@@ -62,7 +62,9 @@
     <string name="telephone">telefono</string>
     <string name="get_started">Registrar</string>
     <string name="add_client">AGREGAR CLIENTE</string>
-    <string name="add_service">AGREGAR SERVICIO</string>
+    <string name="add_service">AGREGAR LISTA DE PRODUCTOS</string>
 
+    <!--delete after publish-->
+    
 
 </resources>
